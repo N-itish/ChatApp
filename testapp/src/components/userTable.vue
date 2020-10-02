@@ -25,12 +25,16 @@
         </tr>
       </tbody>
     </table>
+    <h1 v-if="userPresent">{{userData}}</h1>
   </div>
 
 </template>
 <script>
 export default {
   name:"tableView",
+  props:{
+    userData:String
+  },
   data(){
     return {
         users:[],
@@ -39,7 +43,13 @@ export default {
         address:'',
       }
   },
+
   methods:{
+    userPresent: function(){
+      if(this.userData.length > 0){
+        return this.userData
+      }
+    },
     remove: function(index){
       this.users.splice(index,1);
     }
