@@ -1,11 +1,12 @@
 <template>
-    <div id = "userList">
-        <h1 v-if="checkUsers">{{users}}</h1>
-    </div>
+    <div id = 'userList'>
+    </div>  
 </template>
 
 <script>
 import axios from 'axios';
+import {eventBus} from '../Mediator.js'
+
 export default {
     name:"userList",
     data(){
@@ -20,17 +21,13 @@ export default {
             if(this.users.length > 0){
                 return this.users;
             }
-        },
-        emitToParent(){
-            this.$emit('child-data',this.users)
         }
     },
     created: function(){
-          axios.get(this.url,{
-            'Access-Control-Allow-Origin': '*'
-          }).then((response) => {
+          axios.get(this.url).then((response) => {
           this.users = response;
-          this.emitToParent();
+          console.log(this.users)
+          eventBus.$emit('httpData',this.users);
       })
     },
    

@@ -5,45 +5,43 @@
         <tr>
           <th>#</th>
           <th>UserName</th>
-          <th>Department</th>
-          <th>Address</th>
+          <th>Role</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(user,index) in users" :key="index">
+        <tr v-for="(users,index) in userData" :key="index">
           <td>{{index+1}}<td>
-          <td>{{user.username}}</td>
-          <td>{{user.department}}</td>
-          <td>{{user.address}}</td>
+          <td>{{userData.data.args.foo1}}</td>
+          <td>{{userData.data.headers}}</td>
           <button v-on:click = "remove(index)">delete</button>
         </tr>
         <tr>
           <td><input v-model = "username" type = "text"/></td>
-          <td><input v-model = "department" type = "text"/></td>
-          <td><input v-model = "address" type="text"/></td>
+          <td><input v-model = "role" type="text"/></td>
           <button v-on:click  ="add">add</button>
         </tr>
       </tbody>
     </table>
-    <h1 v-if="userPresent">{{userData}}</h1>
   </div>
-
 </template>
 <script>
+import {eventBus} from '../Mediator.js'
 export default {
   name:"tableView",
-  props:{
-    userData:String
-  },
   data(){
     return {
         users:[],
         username:'',
-        department :'',
-        address:'',
+        role:'',
+        userData:[]
       }
   },
-
+  created:function(){
+    eventBus.$on('httpData',(user)=>{
+      console.log("tranistion has been made")
+      this.userData = user;
+    })
+  },
   methods:{
     userPresent: function(){
       if(this.userData.length > 0){
@@ -62,4 +60,14 @@ export default {
 </script>
 
 <style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
 </style>
