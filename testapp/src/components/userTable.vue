@@ -1,5 +1,6 @@
 <template>
   <div id="tableView">
+    <user-list></user-list>
     <table>
       <thead>
         <tr>
@@ -26,6 +27,7 @@
 </template>
 <script>
 import {eventBus} from '../Mediator.js'
+import userList from '../components/userList';
 export default {
   name:"tableView",
   data(){
@@ -35,6 +37,8 @@ export default {
         role:'',
         userData:[]
       }
+  },components:{
+    userList
   },
   created:function(){
     eventBus.$on('httpData',(user)=>{
@@ -49,11 +53,10 @@ export default {
       }
     },
     remove: function(index){
-      this.users.splice(index,1);
+      this.userData.splice(index,1);
     }
     ,add: function(){
-      this.users.push({username:this.username,department:this.department,address:this.address});
-      console.log(this.username+" "+this.department+" "+this.address) 
+      this.userData.push({username:this.username,role:this.role});
     }
   }
 }

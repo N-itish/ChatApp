@@ -1,14 +1,11 @@
 <template>
   <div id="app">
-    <user-table></user-table>
-    <user-list></user-list>
-    <!--loading taking the data from the postman api in user-list takes long time -->
+    <default-router></default-router>
   </div>
 </template>
 <script>
-import userList from './components/userList.vue';
-import userTable from './components/userTable.vue';
 
+import defaultRouter from './router/defaultRouter';
 export default {
   name:"app",
   data(){
@@ -17,8 +14,7 @@ export default {
     };
   },
   components:{ 
-     userList,
-     userTable
+     defaultRouter
   },
 }
 </script>
