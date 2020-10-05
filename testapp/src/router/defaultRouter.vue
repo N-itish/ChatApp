@@ -4,9 +4,13 @@
 <script>
 import HomePage from '../components/HomePage';
 import userTable from '../components/userTable';
+import Login from '../components/Login'
+import Registration from '../components/Registration'
 const routes ={
     '/':HomePage,
-    '/admin': userTable
+    '/admin': userTable,
+    '/login': Login,
+    '/registration':Registration
 }
 export default {
    data(){

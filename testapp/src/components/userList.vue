@@ -23,7 +23,7 @@ export default {
             }
         }
     },
-    created: function(){
+    created(){
           axios.get(this.url).then((response) => {
           this.users = response;
           console.log(this.users)
