@@ -5,13 +5,13 @@
 
 <script>
 import axios from 'axios';
-import {eventBus} from '../Mediator.js'
+import {eventBus} from '../../Mediator'
 
 export default {
     name:"userList",
     data(){
         return{
-            url:"https://cors-anywhere.herokuapp.com/https://postman-echo.com/get?foo1=bar1&foo2=bar2",
+            url:"http://localhost:8090/user/get",
             users:[]
             
         }
@@ -26,7 +26,6 @@ export default {
     created(){
           axios.get(this.url).then((response) => {
           this.users = response;
-          console.log(this.users)
           eventBus.$emit('httpData',this.users);
       })
     },

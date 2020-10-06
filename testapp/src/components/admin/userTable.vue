@@ -12,8 +12,8 @@
       <tbody>
         <tr v-for="(users,index) in userData" :key="index">
           <td>{{index+1}}<td>
-          <td>{{userData.data.args.foo1}}</td>
-          <td>{{userData.data.headers}}</td>
+          <td>{{userData.data.userName}}</td>
+          <td>{{userData.data.role}}</td>
           <button v-on:click = "remove(index)">delete</button>
         </tr>
         <tr>
@@ -26,8 +26,8 @@
   </div>
 </template>
 <script>
-import {eventBus} from '../Mediator.js'
-import userList from '../components/userList';
+import {eventBus} from '../../Mediator.js'
+import userList from '../../components/admin/userList';
 export default {
   name:"tableView",
   data(){
@@ -40,22 +40,22 @@ export default {
   },components:{
     userList
   },
-  created:function(){
+  created(){
     eventBus.$on('httpData',(user)=>{
       console.log("tranistion has been made")
       this.userData = user;
     })
   },
   methods:{
-    userPresent: function(){
+    userPresent(){
       if(this.userData.length > 0){
         return this.userData
       }
     },
-    remove: function(index){
+    remove(index){
       this.userData.splice(index,1);
     }
-    ,add: function(){
+    ,add(){
       this.userData.push({username:this.username,role:this.role});
     }
   }
