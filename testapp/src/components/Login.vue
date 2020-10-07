@@ -8,18 +8,24 @@
     </div>
 </template>
 <script>
-
+import axios from 'axios'
 export default {
     name:"LoginComponent",
     data(){
         return{
-            url:"https://loaclhost:8080/user/login",
+            url:"http://localhost:8090/user/login",
             email:"abc@gmail.com",
             password:""
         }
     },methods:{
         submitLogin(){
-            alert(this.email + " : " +this.password)
+            const formData = new FormData();
+            formData.append('email',this.email);
+            formData.append('password',this.password);
+          
+           axios.post(this.url,formData).then((response) => {
+          console.log(response.data)
+         });
         }
     }
 }

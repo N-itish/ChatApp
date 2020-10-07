@@ -10,7 +10,7 @@ const routes ={
     '/':HomePage,
     '/admin': userTable,
     '/login': Login,
-    '/registration':Registration
+    '/register':Registration
 }
 export default {
    data(){

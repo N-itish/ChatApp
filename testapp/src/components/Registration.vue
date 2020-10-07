@@ -11,6 +11,7 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
     name : "RegComp",
     data(){
@@ -19,12 +20,21 @@ export default {
                 email:"",
                 gender:"",
                 dob:"",
-                password:""
+                password:"",
+                url:"http://localhost:8090/user/register"
             }
         
     },methods:{
         sendUserDetails(){
-           alert(this.dob)
+           const formData = new FormData();
+           formData.append("userName",this.username);
+           formData.append("email",this.email);
+           formData.append("gender",this.gender);
+           formData.append("dob",new Date(this.dob));
+           formData.append("password",this.password);
+            axios.post(this.url,formData).then((response) =>{
+                console.log(response);
+            })
         }
     }
 }
