@@ -1,7 +1,7 @@
 package com.nitish.ChatApp.Repository;
 
-import com.nitish.ChatApp.Entity.User;
+import com.nitish.ChatApp.Entity.UserData;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<User,Integer> {
+public interface UserRepository extends CrudRepository<UserData,Integer> {
 }

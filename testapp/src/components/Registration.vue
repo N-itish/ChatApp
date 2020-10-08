@@ -1,13 +1,15 @@
 <template>
     <div id ="RegComp">
-        <form id = "RegDetails" @submit.prevent= "sendUserDetails">
-            UserName:   <input v-model="username" type = "text"><br>
-            Email:      <input v-model="email" type = "text"><br>
-            Gender:     <input v-model="gender" type = "text"><br>
-            DOB:        <input v-model="dob" type="date"><br>
-            Password:   <input v-model="password" type = "password"><br>
-            <button type="submit">Sign Up</button>
-        </form>
+        <div id = "RegistrationForm">
+            <form id = "RegDetails" @submit.prevent= "sendUserDetails">
+                <label>UserName: </label>  <input v-model="username" type = "text"><br>
+                <label>Email:    </label>  <input v-model="email" type = "text"><br>
+                <label>Gender:   </label>  <input v-model="gender" type = "text"><br>
+                <label>DOB:      </label>  <input v-model="dob" type="date"><br>
+                <label>Password: </label>  <input v-model="password" type = "password"><br>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
     </div>
 </template>
 <script>
@@ -32,10 +34,46 @@ export default {
            formData.append("gender",this.gender);
            formData.append("dob",new Date(this.dob));
            formData.append("password",this.password);
+           formData.append("role","user");
             axios.post(this.url,formData).then((response) =>{
-                console.log(response);
+                console.log(response.data);
             })
         }
     }
 }
 </script>
+<style>
+#RegistrationForm{
+     margin: auto;
+        border: 3px solid black;
+        padding: 10px;
+        position: absolute;
+        top:10%;
+        left:35%;
+        width: 400px;
+        height: 400px;
+}
+label{
+        font-size: 20px;
+        display: inline-block;
+        width: 140px;
+        text-align: left;  
+    }
+    input{
+       margin-top:20px;
+       height: 30px;
+        width : 200px;
+        font-size: 20px;
+    }
+    button{
+        margin-top: 45px;
+        height: 40px;
+        width : 100px;
+        font-size: 20px;
+        border:none;
+        background: blue;
+        color: white;
+        float: right;
+    }
+
+</style>

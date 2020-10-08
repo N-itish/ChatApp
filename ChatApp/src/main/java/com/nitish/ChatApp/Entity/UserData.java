@@ -4,9 +4,10 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-public class User {
+@Table(name="userdata")
+public class UserData {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userId")
     private int userId;
     @Column(name = "userName")
@@ -21,8 +22,10 @@ public class User {
     private String gender;
     @Temporal(TemporalType.DATE)
     private Date dob;
+    public UserData(){
 
-    public User(String userName,String role){
+    }
+    public UserData(String userName, String role){
         this.userName = userName;
         this.role = role;
     }
