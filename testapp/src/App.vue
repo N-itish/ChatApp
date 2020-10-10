@@ -20,7 +20,12 @@ export default {
 </script>
 
 <style>
-
+button{
+        border:none;
+        background: blue;
+        color: white;
+        font-size: 20px;
+}
 </style>
 
 

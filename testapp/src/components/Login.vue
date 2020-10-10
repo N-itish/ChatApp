@@ -10,7 +10,8 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import {eventBus} from '../Mediator';
 export default {
     name:"LoginComponent",
     data(){
@@ -26,13 +27,13 @@ export default {
             formData.append('password',this.password);
           
            axios.post(this.url,formData).then((response) => {
-          console.log(response.data)
-         });
+                 eventBus.$emit('loginStatus',response.data);
+           });
         }
     }
 }
 </script>
-<style>
+<style scoped>
     #FormData{
         margin: auto;
         border: 3px solid black;
@@ -59,10 +60,6 @@ export default {
         margin-top: 45px;
         height: 40px;
         width : 100px;
-        font-size: 20px;
-        border:none;
-        background: blue;
-        color: white;
         float: right;
     }
 

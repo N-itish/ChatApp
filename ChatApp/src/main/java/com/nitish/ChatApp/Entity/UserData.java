@@ -23,7 +23,7 @@ public class UserData {
     @Temporal(TemporalType.DATE)
     private Date dob;
     public UserData(){
-
+        
     }
     public UserData(String userName, String role){
         this.userName = userName;

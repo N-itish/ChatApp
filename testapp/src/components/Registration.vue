@@ -42,9 +42,9 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
 #RegistrationForm{
-     margin: auto;
+        margin: auto;
         border: 3px solid black;
         padding: 10px;
         position: absolute;
@@ -69,10 +69,6 @@ label{
         margin-top: 45px;
         height: 40px;
         width : 100px;
-        font-size: 20px;
-        border:none;
-        background: blue;
-        color: white;
         float: right;
     }
 

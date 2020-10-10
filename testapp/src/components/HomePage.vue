@@ -39,7 +39,7 @@ export default {
     }
 }
 </script>
-<style>
+<style scoped>
     #MessageComponent{
         font-size: 20px;
     }
@@ -55,8 +55,6 @@ export default {
     }
     #SendButton{
         font-size: 20px;
-        background-color: green;
-        color:white;
         border:None;
         width:100px;
         height:50px;
