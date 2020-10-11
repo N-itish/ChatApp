@@ -5,6 +5,7 @@ import com.nitish.ChatApp.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 //@CrossOrigin(origins = "http://localhost:8081")
@@ -15,10 +16,8 @@ public class UserControlller {
     private UserRepository userRepo;
 
     @RequestMapping(value = "/get",method = RequestMethod.GET)
-    public UserData userList(){
-
-        UserData user = new UserData("Nitish","Admin");
-        return user;
+    public List<UserData> userList(){
+        return userRepo.findAll();
     }
 
     @RequestMapping(value = "/login",method =RequestMethod.POST)

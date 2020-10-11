@@ -3,7 +3,7 @@
 </template>
 <script>
 import HomePage from '../components/HomePage';
-import userTable from '../components/admin/userTable';
+import userTable from '../components/admin/AdminPanel';
 import Login from '../components/Login';
 import Registration from '../components/Registration';
 import {eventBus} from '../Mediator';
@@ -30,7 +30,7 @@ export default {
    computed:{
        routedComponent(){
            //defined all the routes that require login in this variable
-           var LogInRequiredPages = ['/homepage','/admin'];
+           var LogInRequiredPages = ['/homepage'];
 
            if(LogInRequiredPages.includes(this.currentURL) && !this.loggedIn){
                return routes['/login']; 
