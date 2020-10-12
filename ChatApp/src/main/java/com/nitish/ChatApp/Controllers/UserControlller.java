@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-//@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping(value = "/user",method = RequestMethod.GET)
 public class UserControlller {
@@ -20,6 +18,10 @@ public class UserControlller {
         return userRepo.findAll();
     }
 
+    @RequestMapping(value = "/update",method = RequestMethod.PUT)
+    public void updateUser (@ModelAttribute UserData user){
+        userRepo.save(user);
+    }
     @RequestMapping(value = "/login",method =RequestMethod.POST)
     public Boolean loginUser(@ModelAttribute UserData user){
         ArrayList<UserData> userData = (ArrayList) userRepo.findAll();

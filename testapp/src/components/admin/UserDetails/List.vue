@@ -1,5 +1,5 @@
 <template>
-  <div id="userList">
+  <div id="listView">
       <table>
           <thead>
               <tr>
@@ -22,9 +22,9 @@
 </template>
 <script>
 import axios from 'axios';
-import { eventBus } from '../../../Mediator';
+
 export default {
-    name : "userList",
+    name : "listView",
     data(){
         return {
             url:"http://localhost:8090/user/get",
@@ -38,8 +38,7 @@ export default {
         });
     },methods:{
         edit(index){
-            eventBus.$emit("details",this.userData[index]);
-            eventBus.$emit("showDetails",true);
+            this.$emit('userDetails',this.userData[index]);
         }
     }
 }

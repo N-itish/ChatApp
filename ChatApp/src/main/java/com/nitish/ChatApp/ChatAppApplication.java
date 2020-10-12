@@ -14,19 +14,5 @@ public class ChatAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ChatAppApplication.class, args);
 	}
-	@Bean
-	public WebMvcConfigurer corsConfig(){
-		return new WebMvcConfigurer() {
-			@Override
-			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**")
-						.allowedMethods("GET", "POST", "PUT", "DELETE")
-						.allowedOrigins("*")
-						.allowedHeaders("*")
-						.allowCredentials(false);
-			}
-		};
-	}
-
 
 }
