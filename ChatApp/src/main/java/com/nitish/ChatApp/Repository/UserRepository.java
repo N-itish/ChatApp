@@ -8,4 +8,5 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<UserData,Integer> {
     @Override
     List<UserData> findAll();
+    UserData findByEmail(String email);
 }

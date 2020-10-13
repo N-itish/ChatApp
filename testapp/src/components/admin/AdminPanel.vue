@@ -5,6 +5,7 @@
       </div>
       <list-view v-if="showList" v-on:userDetails="getUserDetails"></list-view>
       <detailed-view  v-if="showDetails" :userData = "detailedUserData"></detailed-view>
+      <button id = "logout">Logout</button>
   </div>
 </template>
 <script>
@@ -51,6 +52,13 @@ label{
 label:hover{
   color:black;
   background-color: white;
+}
+#logout{
+  float: right;
+  padding:10px;
+  position:relative;
+  margin-top:40%;
+  margin-right : 20px;
 }
 </style>
 
