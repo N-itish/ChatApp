@@ -30,9 +30,8 @@ export default {
    computed:{
        routedComponent(){
            //defined all the routes that require login in this variable
-           var LogInRequiredPages = ['/homepage'];
-
-           if(LogInRequiredPages.includes(this.currentURL) && !this.loggedIn){
+           //var LogInRequiredPages = ['/homepage'];
+            if(!this.loggedIn){
                return routes['/login']; 
            } 
            else{

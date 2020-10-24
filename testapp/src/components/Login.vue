@@ -1,11 +1,9 @@
 <template>
     <div id = "LoginComponent">
         <div id = "FormData">
-        <form @submit.prevent="submitLogin">
             <label>Email:</label><input type="text" v-model="email"><br>
             <label>Password:</label><input type="password" v-model="password"> <br>  
-            <button type="submit">Sign In</button>
-        </form>
+            <button  v-on:click = "signIn">Sign In</button>
         </div>
     </div>
 </template>
@@ -21,16 +19,19 @@ export default {
             password:""
         }
     },methods:{
-        submitLogin(){
-            const formData = new FormData();
-            formData.append('email',this.email);
-            formData.append('password',this.password);
-          
-           axios.post(this.url,formData).then((response) => {
-                 eventBus.$emit('loginStatus',response.data);
-           });
+        signIn(){
+        axios.post(this.url,{}, {
+            auth: {
+                username: this.email,
+                password: this.password
+              }
+        })
+        .then(function (response) {
+            eventBus.$emit('loginStatus',response.data);
+        })
         }
     }
+    
 }
 </script>
 <style scoped>

@@ -8,14 +8,9 @@
 import defaultRouter from './router/defaultRouter';
 export default {
   name:"app",
-  data(){
-    return{ 
-      users:[]
-    };
-  },
   components:{ 
      defaultRouter
-  },
+  }
 }
 </script>
 

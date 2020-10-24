@@ -22,19 +22,11 @@ public class UserControlller {
     public void updateUser (@ModelAttribute UserData user){
         userRepo.save(user);
     }
+
+    //spring boot will authenticate the user, this is for response data only
     @RequestMapping(value = "/login",method =RequestMethod.POST)
-    public Boolean loginUser(@ModelAttribute UserData user){
-        ArrayList<UserData> userData = (ArrayList) userRepo.findAll();
-        for(UserData data: userData){
-            if(data.getEmail().equalsIgnoreCase(user.getEmail()) &&
-                                data.getPassword().equalsIgnoreCase(user.getPassword())
-            )
-            {
-                return true;
-            }
-        }
-        //failed to authenticate
-        return false;
+    public Boolean loginUser(){
+        return true;
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
