@@ -3,33 +3,29 @@
         <div id = "FormData">
             <label>Email:</label><input type="text" v-model="email"><br>
             <label>Password:</label><input type="password" v-model="password"> <br>  
-            <button  v-on:click = "signIn">Sign In</button>
+            <button  v-on:click = "SignIn">Sign In</button>
         </div>
     </div>
 </template>
 <script>
-import axios from 'axios';
+import userAPI from '../service/userAPI'
 import {eventBus} from '../Mediator';
 export default {
     name:"LoginComponent",
     data(){
         return{
-            url:"http://localhost:8090/user/login",
             email:"abc@gmail.com",
             password:""
         }
     },methods:{
-        signIn(){
-        axios.post(this.url,{}, {
-            auth: {
-                username: this.email,
-                password: this.password
-              }
-        })
-        .then(function (response) {
-            eventBus.$emit('loginStatus',response.data);
-        })
-        }
+        SignIn(){
+            const authToken = 'Basic '+ btoa(this.email+":"+this.password);
+            userAPI.setAuthToken(authToken);
+            userAPI.instance.post('/login',{}).then((response)=>{
+                eventBus.$emit('loginStatus',response.data)
+            });
+        },
+        
     }
     
 }

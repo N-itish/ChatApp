@@ -10,7 +10,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
+import userAPI from '../../../service/userAPI'
 export default {
     name:"userDetails",
     props:{
@@ -20,7 +20,6 @@ export default {
         return{
             //cloning the props data to an object so it can be modified
             detailedUserInfo:Object.assign({},this.userData),
-            url:"http://localhost:8090/user/update"
         }
     },methods:{
         updateUserData(){
@@ -33,9 +32,9 @@ export default {
             updateData.append("dob",			new Date(this.detailedUserInfo.dob));
             updateData.append("password",		this.detailedUserInfo.password);
             updateData.append("role",			this.detailedUserInfo.role);
-             axios.put(this.url,updateData).then((response) =>{
-                 console.log(response.data);
-             })
+            userAPI.instance.put('/update',updateData).then((response) =>{
+                console.log(response.data);
+            })
         }
     }
 }

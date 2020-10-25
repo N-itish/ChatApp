@@ -21,21 +21,20 @@
   </div>   
 </template>
 <script>
-import axios from 'axios';
 
+import userAPI from '../../../service/userAPI'
 export default {
     name : "listView",
     data(){
         return {
-            url:"http://localhost:8090/user/get",
             userData:[]
         }
             
     },
     created(){
-        axios.get(this.url).then((response)=>{
-            this.userData = response.data
-        });
+        userAPI.instance.get('/get').then((response)=>{
+            this.userData = response.data;
+        })
     },methods:{
         edit(index){
             this.$emit('userDetails',this.userData[index]);

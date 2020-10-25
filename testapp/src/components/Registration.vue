@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
+import userAPI from '../service/userAPI'
 export default {
     name : "RegComp",
     data(){
@@ -22,8 +22,7 @@ export default {
                 email:"",
                 gender:"",
                 dob:"",
-                password:"",
-                url:"http://localhost:8090/user/register"
+                password:""
             }
         
     },methods:{
@@ -35,9 +34,9 @@ export default {
            formData.append("dob",new Date(this.dob));
            formData.append("password",this.password);
            formData.append("role","user");
-            axios.post(this.url,formData).then((response) =>{
-                console.log(response.data);
-            })
+           userAPI.instance.post('/register',formData).then((response) =>{
+               console.log(response.data);
+           })
         }
     }
 }
