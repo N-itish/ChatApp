@@ -23,7 +23,23 @@ export default {
         var url = "http://localhost:8090/gs-guide-websocket"
         if(this.stompClient == null){
             this.stompClient = Stomp.over(new SockJS(url));
-            this.stompClient.connect();
+            //this.stompClient.connect();
+            //testing stompclient
+             
+      //this.socket = new SockJS("http://localhost:8080/gs-guide-websocket");
+      //this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        {},
+        frame => {
+          console.log(frame);
+          this.stompClient.subscribe("/messages", tick => {
+            this.messageList = this.messageList +" "+ tick.body
+          });
+        },
+        error => {
+          console.log(error);
+          //this.connected = false;
+        }); 
         }
     },
     methods:{

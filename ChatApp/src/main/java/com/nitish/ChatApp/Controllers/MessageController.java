@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 public class MessageController {
     @MessageMapping("/sendMessage")
     @SendTo("/messages")
-    public UserMessage sendMessage(UserMessage userMessage){
+    public String sendMessage(UserMessage userMessage){
         System.out.println("Message:"+userMessage.getMessage()+"recieved from :" + userMessage.getUsername());
-        return userMessage;
+        return userMessage.getMessage();
     }
 }
