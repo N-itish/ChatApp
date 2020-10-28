@@ -23,6 +23,11 @@ public class UserControlller {
         userRepo.save(user);
     }
 
+    @RequestMapping(value = "/getUsername",method = RequestMethod.GET)
+    public List<String> getUserNames(){
+        return userRepo.findUserNames();
+    }
+
     //spring boot will authenticate the user, this is for response data only
     @RequestMapping(value = "/login",method =RequestMethod.POST)
     public Boolean loginUser(){

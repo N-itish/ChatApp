@@ -8,7 +8,7 @@ import Login from '../components/Login';
 import Registration from '../components/Registration';
 import {eventBus} from '../Mediator';
 const routes ={
-    '/':Login,
+    '/':HomePage,
     '/homepage':HomePage,
     '/admin': userTable,
     '/login': Login,

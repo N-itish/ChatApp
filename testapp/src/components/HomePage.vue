@@ -5,18 +5,27 @@
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
+        <div>
+            <label>find All users</label>
+            <button v-on:click ="findUsers">Search</button>
+            <ul v-for="(user,index) in users" :key="index">
+                <li>{{index+1}} {{user}}</li>
+            </ul>
+        </div>
     </div>
 </template>
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import userAPI from '../service/userAPI'
 export default {
     name:"HomePage",
     data(){
         return{
             message:"",
             messageList:"",
-            stompClient:null
+            stompClient:null,
+            users:[]
         };
     },
     mounted(){
@@ -51,6 +60,10 @@ export default {
         if(this.stompClient != null){
             this.stompClient.send("/app/sendMessage",JSON.stringify(messager),{});
         }
+    },findUsers(){
+        userAPI.instance.get('/getUsername').then((response)=>{
+            this.users = response.data;
+        })
     }
     }
 }
@@ -72,6 +85,11 @@ export default {
     #SendButton{
         font-size: 20px;
         border:None;
+        width:100px;
+        height:50px;
+    }
+    label{
+        font-size: 20px;
         width:100px;
         height:50px;
     }
