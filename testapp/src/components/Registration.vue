@@ -36,6 +36,10 @@ export default {
            formData.append("role","user");
            userAPI.instance.post('/register',formData).then((response) =>{
                console.log(response.data);
+               //redirect to login if successful registration
+               if(response.data){
+                   window.location.href = '/'
+               }
            })
         }
     }

@@ -15,51 +15,33 @@
     </div>
 </template>
 <script>
-import SockJS from "sockjs-client";
-import Stomp from "webstomp-client";
-import userAPI from '../service/userAPI'
+import {eventBus} from '../Mediator'
+import webSocket from '../service/webSocket';
+import userAPI from '../service/userAPI';
 export default {
     name:"HomePage",
     data(){
         return{
             message:"",
             messageList:"",
-            stompClient:null,
-            users:[]
+            users:[],
+            webSocketInstance : null
         };
     },
     mounted(){
-        var url = "http://localhost:8090/gs-guide-websocket"
-        if(this.stompClient == null){
-            this.stompClient = Stomp.over(new SockJS(url));
-            //this.stompClient.connect();
-            //testing stompclient
-             
-      //this.socket = new SockJS("http://localhost:8080/gs-guide-websocket");
-      //this.stompClient = Stomp.over(this.socket);
-      this.stompClient.connect(
-        {},
-        frame => {
-          console.log(frame);
-          this.stompClient.subscribe("/messages", tick => {
-            this.messageList = this.messageList +" "+ tick.body
-          });
-        },
-        error => {
-          console.log(error);
-          //this.connected = false;
-        }); 
-        }
+        this.webSocketInstance = new webSocket();
+        this.webSocketInstance.connect();
+        eventBus.$on('recievedMessage',(message)=>{
+            this.messageList = this.messageList + message;
+        });
     },
     methods:{
         sendMessage(){
-        var messager = {
+        var messageSender = {
             username:"Nitish",
             message :this.message
         }
-        if(this.stompClient != null){
-            this.stompClient.send("/app/sendMessage",JSON.stringify(messager),{});
-        }
+        this.webSocketInstance.send(messageSender)
     },findUsers(){
         userAPI.instance.get('/getUsername').then((response)=>{
             this.users = response.data;
