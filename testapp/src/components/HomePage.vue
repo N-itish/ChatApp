@@ -15,7 +15,7 @@
     </div>
 </template>
 <script>
-import {eventBus} from '../Mediator'
+import {eventBus} from '../Mediator';
 import webSocket from '../service/webSocket';
 import userAPI from '../service/userAPI';
 export default {

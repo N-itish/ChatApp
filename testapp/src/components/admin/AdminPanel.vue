@@ -2,38 +2,34 @@
   <div id="adminPanel">
       <div id = "Header">
           <label v-on:click = "showUserList">Display Users</label>
+          <label v-on:click = "changePassword">Change Password</label>
       </div>
-      <list-view v-if="showList" v-on:userDetails="getUserDetails"></list-view>
+      
+      <!-- <list-view v-if="showList" v-on:userDetails="getUserDetails"></list-view>
       <detailed-view  v-if="showDetails" :userData = "detailedUserData"></detailed-view>
+      <change-password v-if="showPasswordChange"></change-password> -->
       <button id = "logout">Logout</button>
   </div>
 </template>
 <script>
-import listView from '../admin/UserDetails/List';
-import detailedView from '../admin/UserDetails/Detailed';
+
 export default {
   name:"adminPanel",
   data(){
     return{
-      showList:false,
-      showDetails:false,
       detailedUserData:[]
     };
   },methods:{
     showUserList(){
-      this.showList = true;
-      this.showDetails = false;
+
+    },
+    changePassword(){
+
     },
     getUserDetails(value){
       this.detailedUserData = value;
-      this.showList = false;
-      this.showDetails = true;
     }
   },
- components:{
-    listView,
-    detailedView
-  }
 }
 </script>
 <style scoped>

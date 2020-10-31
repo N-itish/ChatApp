@@ -1,16 +1,13 @@
 <template>
   <div id="app">
-    <default-router></default-router>
+    <router-view/>
   </div>
 </template>
 <script>
 
-import defaultRouter from './router/defaultRouter';
+
 export default {
-  name:"app",
-  components:{ 
-     defaultRouter
-  }
+  name:"app"
 }
 </script>
 

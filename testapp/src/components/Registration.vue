@@ -13,7 +13,7 @@
     </div>
 </template>
 <script>
-import userAPI from '../service/userAPI'
+import userAPI from '../service/userAPI';
 export default {
     name : "RegComp",
     data(){
