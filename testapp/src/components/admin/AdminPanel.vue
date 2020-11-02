@@ -4,7 +4,7 @@
           <label v-on:click = "showUserList">Display Users</label>
           <label v-on:click = "changePassword">Change Password</label>
       </div>
-      
+      <p>The data sent over from the params:{{this.$route.params.data}}</p>      
       <!-- <list-view v-if="showList" v-on:userDetails="getUserDetails"></list-view>
       <detailed-view  v-if="showDetails" :userData = "detailedUserData"></detailed-view>
       <change-password v-if="showPasswordChange"></change-password> -->

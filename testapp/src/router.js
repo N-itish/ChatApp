@@ -1,9 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HomePage from "./components/HomePage.vue";
-import AdminPage from "./components/admin/AdminPanel.vue";
-import Login from "./components/Login.vue";
-import Register from "./components/Registration.vue";
 
 
 Vue.use(Router);
@@ -18,20 +15,17 @@ const router = new Router({
         {
             path: "/admin",
             name: "admin",
-            component: AdminPage,
-            children:[
-
-            ]
+            component: ()=> import(/* webpackChunkName: "admin" */  "./components/admin/AdminPanel.vue")
         },
         {
             path: "/login",
             name: "login",
-            component: Login
+            component: ()=> import(/* webpackChunkName: "login" */ "./components/Login.vue")
         },
         {
             path:"/register",
             name:"register",
-            component: Register
+            component: ()=> import(/* webpackChunkName: "register" */ "./components/Registration.vue")
         }
     ]
 });
