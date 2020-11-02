@@ -6,6 +6,7 @@ import HomePage from "./components/HomePage.vue";
 Vue.use(Router);
 
 const router = new Router({
+    mode:"history",
     routes: [
         {
           path: "/",
@@ -15,7 +16,14 @@ const router = new Router({
         {
             path: "/admin",
             name: "admin",
-            component: ()=> import(/* webpackChunkName: "admin" */  "./components/admin/AdminPanel.vue")
+            component: ()=> import(/* webpackChunkName: "admin" */  "./components/admin/AdminPanel.vue"),
+            children:[
+                {
+                    path:"/list",
+                    name:"list",
+                    component:()=> import(/* webpackChunkName: "userList" */ "./components/admin/UserDetails/List.vue")
+                }
+            ]
         },
         {
             path: "/login",

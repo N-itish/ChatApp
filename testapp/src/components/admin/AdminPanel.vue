@@ -1,9 +1,10 @@
 <template>
   <div id="adminPanel">
       <div id = "Header">
-          <label v-on:click = "showUserList">Display Users</label>
+          <router-link :to="{name:'list'}"> Display Users </router-link>
           <label v-on:click = "changePassword">Change Password</label>
       </div>
+      <router-view></router-view>
       <p>The data sent over from the params:{{this.$route.params.data}}</p>      
       <!-- <list-view v-if="showList" v-on:userDetails="getUserDetails"></list-view>
       <detailed-view  v-if="showDetails" :userData = "detailedUserData"></detailed-view>
