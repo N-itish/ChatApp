@@ -1,11 +1,11 @@
 <template>
     <div id = "detailedView">
-        <label>UserName :</label><input type = "text" v-model="detailedUserInfo.userName"><br>
-        <label>Password :</label><input type = "text" v-model="detailedUserInfo.password" readonly><br>
-        <label>Email	:</label><input type = "text" v-model="detailedUserInfo.email" readonly><br>  
-        <label>Gender	:</label><input type = "text" v-model="detailedUserInfo.gender"><br>
-        <label>Dob		:</label><input type = "text" v-model="detailedUserInfo.dob"><br>
-        <label>Role		:</label><input type = "text" v-model="detailedUserInfo.role"><br>
+        <label>UserName :</label><input type = "text" v-model="detailedUserInfo.userName"><br/>
+        <label>Password :</label><input type = "text" v-model="detailedUserInfo.password" readonly><br/>
+        <label>Email	:</label><input type = "text" v-model="detailedUserInfo.email" readonly><br/>  
+        <label>Gender	:</label><input type = "text" v-model="detailedUserInfo.gender"><br/>
+        <label>Dob		:</label><input type = "text" v-model="detailedUserInfo.dob"><br/>
+        <label>Role		:</label><input type = "text" v-model="detailedUserInfo.role"><br/>
         <button v-on:click="updateUserData">Update</button>
     </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
     <div id = "HomePage">
         <div id = "MessageComponent">
-            <textarea id = "MessageArea" v-model="messageList"></textarea><br>
+            <textarea id = "MessageArea" v-model="messageList"></textarea><br/>
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>

@@ -2,11 +2,11 @@
     <div id ="RegComp">
         <div id = "RegistrationForm">
             <form id = "RegDetails" @submit.prevent= "sendUserDetails">
-                <label>UserName: </label>  <input v-model="username" type = "text"><br>
-                <label>Email:    </label>  <input v-model="email" type = "text"><br>
-                <label>Gender:   </label>  <input v-model="gender" type = "text"><br>
-                <label>DOB:      </label>  <input v-model="dob" type="date"><br>
-                <label>Password: </label>  <input v-model="password" type = "password"><br>
+                <label>UserName: </label>  <input v-model="username" type = "text"><br/>
+                <label>Email:    </label>  <input v-model="email" type = "text"><br/>
+                <label>Gender:   </label>  <input v-model="gender" type = "text"><br/>
+                <label>DOB:      </label>  <input v-model="dob" type="date"><br/>
+                <label>Password: </label>  <input v-model="password" type = "password"><br/>
                 <button type="submit">Sign Up</button>
             </form>
         </div>

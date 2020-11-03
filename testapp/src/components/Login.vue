@@ -1,8 +1,8 @@
 <template>
     <div id = "LoginComponent">
         <div id = "FormData">
-            <label>Email:</label><input type="text" v-model="email" placeholder = "e.g.: abc@gmail.com "><br>
-            <label>Password:</label><input type="password" v-model="password" placeholder = "your password"> <br>  
+            <label>Email:</label><input type="text" v-model="email" placeholder = "e.g.: abc@gmail.com "><br/>
+            <label>Password:</label><input type="password" v-model="password" placeholder = "your password"> <br/>  
             <button  v-on:click = "SignIn">Sign In</button>
         </div>
     </div>

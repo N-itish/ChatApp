@@ -11,17 +11,29 @@ const router = new Router({
         {
           path: "/",
           name: "home",
-          component: HomePage
+          component: HomePage,
+          meta: {loginRequired: true}
         },
         {
             path: "/admin",
             name: "admin",
             component: ()=> import(/* webpackChunkName: "admin" */  "./components/admin/AdminPanel.vue"),
+            meta: {loginRequired: false},
             children:[
                 {
                     path:"/list",
                     name:"list",
                     component:()=> import(/* webpackChunkName: "userList" */ "./components/admin/UserDetails/List.vue")
+                },
+                {
+                    path:"/changePassword",
+                    name:"changePassword",
+                    component: ()=> import(/* webpackChunkName: "userList" */ "./components/admin/UserDetails/Password.vue")
+                },
+                {
+                    path:"/details",
+                    name:"details",
+                    component: ()=> import(/* webpackChunkName: "userList" */ "./components/admin/UserDetails/Detailed.vue")
                 }
             ]
         },
@@ -38,4 +50,18 @@ const router = new Router({
     ]
 });
 
+router.beforeEach((to,from,next)=>{
+    console.log(localStorage.getItem("userAuthentication"))
+    if(to.meta.loginRequired){
+        if(localStorage.getItem("userAuthentication") !== null){
+            next({
+                name:"login"
+            });
+        }else{
+            next();
+        }
+    }else{
+        next();
+    }
+})
 export default router;
