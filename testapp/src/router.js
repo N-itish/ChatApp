@@ -1,7 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HomePage from "./components/HomePage.vue";
-
+import store from './service/store';
 
 Vue.use(Router);
 
@@ -18,7 +18,7 @@ const router = new Router({
             path: "/admin",
             name: "admin",
             component: ()=> import(/* webpackChunkName: "admin" */  "./components/admin/AdminPanel.vue"),
-            meta: {loginRequired: false},
+            meta: {loginRequired: true},
             children:[
                 {
                     path:"/list",
@@ -51,11 +51,11 @@ const router = new Router({
 });
 
 router.beforeEach((to,from,next)=>{
-    console.log(localStorage.getItem("userAuthentication"))
     if(to.meta.loginRequired){
-        if(localStorage.getItem("userAuthentication") !== null){
+        console.log(store.authentication);
+        if(store.authentication == null){
             next({
-                name:"login"
+                name:"login",
             });
         }else{
             next();

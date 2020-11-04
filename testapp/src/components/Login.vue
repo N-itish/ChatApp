@@ -9,6 +9,7 @@
 </template>
 <script>
 import userAPI from '../service/userAPI'
+import store from '../service/store'
 export default {
     name:"LoginComponent",
     data(){
@@ -21,8 +22,10 @@ export default {
         SignIn(){
             const authToken = 'Basic '+ btoa(this.email+":"+this.password);
             userAPI.setAuthToken(authToken);
-            userAPI.instance.post('/login',{}).then((response)=>{
-                localStorage.setItem("userAuthentication",response.data);
+             userAPI.instance.post('/login',{}).then((response)=>{
+                 localStorage.setItem("userAuthentication",response.data);
+                 store.authentication = 'user';
+                 this.$router.push('/')
             });
         },
         
