@@ -28,7 +28,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/user/register","/gs-guide-websocket/**").permitAll()
+                .antMatchers("/user/register").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()

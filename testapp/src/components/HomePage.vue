@@ -12,6 +12,12 @@
                 <li>{{index+1}} {{user}}</li>
             </ul>
         </div>
+        <div id = "privateMessage">
+            <p>Private Messaging</p>
+            <label>Session</label><input type="text" v-model="session"><br>
+            <label>Message</label><input type="text" v-model="privateMessage"><br>
+            <button @click="sendPrivate">Send</button>
+        </div>
     </div>
 </template>
 <script>
@@ -25,7 +31,9 @@ export default {
             message:"",
             messageList:"",
             users:[],
-            webSocketInstance : null
+            webSocketInstance : null,
+            session:null,
+            privateMessage:null
         };
     },
     mounted(){
@@ -36,6 +44,13 @@ export default {
         });
     },
     methods:{
+        sendPrivate(){
+            var messageBody = {
+                message: this.privateMessage,
+                sessionId : this.session
+            }
+            this.webSocketInstance.send(messageBody);
+        },
         sendMessage(){
         var messageSender = {
             username:"Nitish",
@@ -75,4 +90,5 @@ export default {
         width:100px;
         height:50px;
     }
+
 </style>
