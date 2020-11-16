@@ -9,19 +9,23 @@
 </template>
 <script>
 import userAPI from '../service/userAPI'
+import webSocket from '../service/webSocket'
 import store from '../service/store'
 export default {
     name:"LoginComponent",
     data(){
         return{
             email : "",
-            password:""
+            password:"",
+            websocketInstance :null
         }
     },
     methods:{
         SignIn(){
             const authToken = 'Basic '+ btoa(this.email+":"+this.password);
             userAPI.setAuthToken(authToken);
+            this.websocketInstance = new webSocket();
+            this.websocketInstance.setAuth(this.email,this.password);
              userAPI.instance.post('/login',{}).then((response)=>{
                  localStorage.setItem("userAuthentication",response.data);
                  store.authentication = 'user';

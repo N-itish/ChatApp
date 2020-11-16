@@ -1,19 +1,26 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-import {eventBus}  from '../Mediator'
-const url = "http://localhost:8090/secured/room"
+import {eventBus}  from '../Mediator';
+const url = "http://localhost:8090/secured/room";
+var headers;
 export default class webSocket{
-
+    static headers = [];
     constructor(){
-        this.socket = new SockJS(url)
+        this.socket = new SockJS(url);
         this.stompClient = Stomp.over(this.socket);
         this.response = "";
-
+        
     }
-
+    setAuth(username,password){
+       headers = {
+           login: username,
+           passcode: password
+       }
+    }
     connect(){
+        //console.log("Inside the webSocket"+headers);
         this.stompClient.connect(
-            {},
+            headers,
             frame => {
               console.log(frame);
               console.log(this.socket._transport.url)

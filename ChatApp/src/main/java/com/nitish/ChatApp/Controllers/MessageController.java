@@ -7,6 +7,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUser;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.DefaultSimpUserRegistry;
 
@@ -17,8 +18,7 @@ public class MessageController {
     private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private DefaultSimpUserRegistry userRegistry;
-
+    private SimpUserRegistry registry;
     @MessageMapping("/sendMessage")
     @SendTo("/messages")
     public String sendMessage(UserMessage userMessage){
@@ -28,10 +28,12 @@ public class MessageController {
 
    @MessageMapping("/secured/room")
     public void sendPrivateMessage(PrivateMessage messageBody){
-        for (SimpUser user: userRegistry.getUsers()){
+        //TODO: check why message not recieved
+
+        for(SimpUser user: registry.getUsers()){
             System.out.println(user.getName());
-        };
-        messagingTemplate.convertAndSendToUser(messageBody.getSessionId(),"/user/queue/specific-user",messageBody.getMessage());
+        }
+       // messagingTemplate.convertAndSendToUser(messageBody.getSessionId(),"/user/queue/specific-user",messageBody.getMessage());
 
    }
 }
