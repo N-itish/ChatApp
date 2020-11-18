@@ -26,7 +26,7 @@ public class WebSocketAuthenticationService {
         if(user == null){
             throw new BadCredentialsException("user was not found!!");
         }
-        return new UsernamePasswordAuthenticationToken(username,password,
+        return new UsernamePasswordAuthenticationToken(username,null,
                 Collections.singleton(
                         (GrantedAuthority) () -> "USER"
                 )

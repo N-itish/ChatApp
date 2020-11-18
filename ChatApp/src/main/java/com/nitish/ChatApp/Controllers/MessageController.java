@@ -13,27 +13,20 @@ import org.springframework.web.socket.messaging.DefaultSimpUserRegistry;
 
 @Controller
 public class MessageController {
-
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    @Autowired
-    private SimpUserRegistry registry;
-    @MessageMapping("/sendMessage")
+    @MessageMapping("/public")
     @SendTo("/messages")
-    public String sendMessage(UserMessage userMessage){
-        System.out.println("Message:"+userMessage.getMessage()+"recieved from :" + userMessage.getUsername());
-        return userMessage.getMessage();
+    public void sendMessage(PrivateMessage messageBody){
+        //System.out.println("Message:"+userMessage.getMessage()+"recieved from :" + userMessage.getUsername());
+        messagingTemplate.convertAndSend(messageBody.getMessage(),"/topic/generalMessages");
+
     }
 
-   @MessageMapping("/secured/room")
-    public void sendPrivateMessage(PrivateMessage messageBody){
-        //TODO: check why message not recieved
 
-        for(SimpUser user: registry.getUsers()){
-            System.out.println(user.getName());
-        }
-       // messagingTemplate.convertAndSendToUser(messageBody.getSessionId(),"/user/queue/specific-user",messageBody.getMessage());
-
+   @MessageMapping("/private")
+   public void privatelySendMessage(PrivateMessage messageBody){
+       messagingTemplate.convertAndSendToUser(messageBody.getSessionId(),"topic/greeting",messageBody.getMessage());
    }
 }

@@ -1,7 +1,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import {eventBus}  from '../Mediator';
-const url = "http://localhost:8090/secured/room";
+const url = "http://localhost:8090/gs-guide-websocket";
 var headers;
 export default class webSocket{
     static headers = [];
@@ -24,7 +24,7 @@ export default class webSocket{
             frame => {
               console.log(frame);
               console.log(this.socket._transport.url)
-              this.stompClient.subscribe("/user/queue/specific-user", tick => {
+              this.stompClient.subscribe("/user/topic/greeting", tick => {
                     eventBus.$emit('recievedMessage',tick.body)
               });
             },
@@ -35,7 +35,7 @@ export default class webSocket{
     }
     
     send(message){
-        this.stompClient.send("/secured/room",JSON.stringify(message),{});
+        this.stompClient.send("/app/private",JSON.stringify(message),{});
     }
     disconnect(){
         this.stompClient = null;
