@@ -5,18 +5,12 @@
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
-        <div>
+        <div id = "Users">
             <label>find All users</label>
             <button v-on:click ="findUsers">Search</button>
             <ul v-for="(user,index) in users" :key="index">
-                <li>{{index+1}} {{user}}</li>
+                <li :class="{'selected': index == selectedIndex}" v-on:click ="getUserName(user,index)">{{user}}</li>
             </ul>
-        </div>
-        <div id = "privateMessage">
-            <p>Private Messaging</p>
-            <label>Session</label><input type="text" v-model="session"><br>
-            <label>Message</label><input type="text" v-model="privateMessage"><br>
-            <button @click="sendPrivate">Send</button>
         </div>
     </div>
 </template>
@@ -32,8 +26,9 @@ export default {
             messageList:"",
             users:[],
             webSocketInstance : null,
-            session:null,
-            privateMessage:null
+            reciever:null,
+            privateMessage:null,
+            selectedIndex : null
         };
     },
     mounted(){
@@ -44,30 +39,27 @@ export default {
         });
     },
     methods:{
-        sendPrivate(){
-            var messageBody = {
-                message: this.privateMessage,
-                sessionId : this.session
-            }
-            this.webSocketInstance.send(messageBody);
-        },
         sendMessage(){
         var messageSender = {
-            username:"Nitish",
-            message :this.message
+            message:this.message,
+            reciever: this.reciever
         }
         this.webSocketInstance.send(messageSender)
     },findUsers(){
         userAPI.instance.get('/getUsername').then((response)=>{
             this.users = response.data;
         })
+    },getUserName(user,index){
+        this.reciever = user;
+        this.selectedIndex = index;
+        console.log("User selected is :"+this.reciever)
     }
     }
 }
 </script>
 <style scoped>
     #MessageComponent{
-        font-size: 20px;
+        font-size: 20px;float:left;
     }
     #MessageArea{
         font-size: 20px;
@@ -90,5 +82,16 @@ export default {
         width:100px;
         height:50px;
     }
+    ul{
+        list-style: none;
+    }
 
+    #Users{
+        float: right;
+        font-size: 20px;
+    }
+    .selected{
+        background-color: black;
+        color: white;
+    }
 </style>

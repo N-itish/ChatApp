@@ -1,20 +1,20 @@
 package com.nitish.ChatApp.Entity;
 
 public class PrivateMessage {
-    String sessionId;
+    String reciever;
     String message;
 
-    public PrivateMessage(String sessionId,String message){
-        this.sessionId = sessionId;
+    public PrivateMessage(String reciever,String message){
+        this.reciever = reciever;
         this.message = message;
     }
 
-    public String getSessionId() {
-        return sessionId;
+    public String getReciever() {
+        return reciever;
     }
 
-    public void setSessionId(String sessionId) {
-        this.sessionId = sessionId;
+    public void setReciever(String reciever) {
+        this.reciever = reciever;
     }
 
     public String getMessage() {

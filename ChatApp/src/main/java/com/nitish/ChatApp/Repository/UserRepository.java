@@ -3,6 +3,7 @@ package com.nitish.ChatApp.Repository;
 import com.nitish.ChatApp.Entity.UserData;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -10,8 +11,11 @@ public interface UserRepository extends CrudRepository<UserData,Integer> {
     @Override
     List<UserData> findAll();
 
+    UserData findByEmail(String email);
+
     @Query("Select userName from UserData")
     List<String> findUserNames();
 
-    UserData findByEmail(String email);
+    @Query("Select a.email from UserData a where LOWER(a.userName) = LOWER(:userName)")
+    String findEmailByUserName(@Param("userName") String userName);
 }

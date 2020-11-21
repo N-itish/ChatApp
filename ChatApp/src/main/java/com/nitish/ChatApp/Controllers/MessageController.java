@@ -1,20 +1,21 @@
 package com.nitish.ChatApp.Controllers;
 
 import com.nitish.ChatApp.Entity.PrivateMessage;
-import com.nitish.ChatApp.Entity.UserMessage;
+import com.nitish.ChatApp.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUser;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.socket.messaging.DefaultSimpUserRegistry;
 
 @Controller
 public class MessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+
+    @Autowired
+    private UserRepository userRepo;
 
     @MessageMapping("/public")
     @SendTo("/messages")
@@ -27,6 +28,10 @@ public class MessageController {
 
    @MessageMapping("/private")
    public void privatelySendMessage(PrivateMessage messageBody){
-       messagingTemplate.convertAndSendToUser(messageBody.getSessionId(),"topic/greeting",messageBody.getMessage());
+        /*
+        *  In the config the user stored in the SimpUser is the email address of the user
+        *  Client send the username and we find the appropriate email from the database
+        */
+       messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()),"topic/greeting",messageBody.getMessage());
    }
 }
