@@ -26,7 +26,7 @@ export default {
             messageList:"",
             users:[],
             webSocketInstance : null,
-            reciever:null,
+            reciever:"",
             privateMessage:null,
             selectedIndex : null
         };
