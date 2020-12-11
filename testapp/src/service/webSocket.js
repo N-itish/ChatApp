@@ -20,7 +20,7 @@ export default class webSocket{
     connect(){
         //console.log("Inside the webSocket"+headers);
         this.stompClient.connect(
-            headers,
+            headers,  
             frame => {
               console.log(frame);
               console.log(this.socket._transport.url)
