@@ -5,35 +5,46 @@
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
-        <div id = "Users">
-            <label>find All users</label>
-            <button v-on:click ="findUsers">Search</button>
-            <ul v-for="(user,index) in users" :key="index">
-                <li :class="{'selected': index == selectedIndex}" v-on:click ="getUserName(user,index)">{{user}}</li>
-            </ul>
-        </div>
+        <UserView></UserView>
+        <CameraView></CameraView>
+        <button v-on:click="sendToServer">sendToServer</button>
     </div>
 </template>
 <script>
-import {eventBus} from '../Mediator';
-import webSocket from '../service/webSocket';
-import userAPI from '../service/userAPI';
+import Camera from '../HomePage/Camera/Camera'
+import Users from '../HomePage/Users/Users'
+import {eventBus} from '../../Mediator';
+import webSocket from '../../service/webSocket';
+
 export default {
     name:"HomePage",
+    components:{
+        'CameraView':Camera,    
+        'UserView':Users 
+    },
     data(){
         return{
             message:"",
             messageList:"",
-            users:[],
             webSocketInstance : null,
-            reciever:"",
             privateMessage:null,
-            selectedIndex : null
+            stream: null
         };
     },
     mounted(){
         this.webSocketInstance = new webSocket();
         this.webSocketInstance.connect();
+
+        eventBus.$on('reciever',(reciever)=>{
+            this.reciever =reciever;
+            console.log(reciever);
+        })
+
+        eventBus.$on('stream',(stream) =>{
+            this.stream = stream;
+            console.log('stream recieved')
+        })
+
         eventBus.$on('recievedMessage',(message)=>{
             this.messageList = this.messageList + message;
         });
@@ -45,14 +56,12 @@ export default {
             reciever: this.reciever
         }
         this.webSocketInstance.send(messageSender)
-    },findUsers(){
-        userAPI.instance.get('/getUsername').then((response)=>{
-            this.users = response.data;
-        })
     },getUserName(user,index){
         this.reciever = user;
         this.selectedIndex = index;
-        console.log("User selected is :"+this.reciever)
+        console.log("User selected is :"+this.reciever);
+    },sendToServer(){
+        this.webSocketInstance.sendVideo(this.stream);
     }
     }
 }

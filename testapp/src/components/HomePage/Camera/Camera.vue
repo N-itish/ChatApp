@@ -7,16 +7,20 @@
 
 </template>
 <script>
-
+import {eventBus} from '../../../Mediator.js'
 export default {
     name:"cameraComp",
     data(){
         return {
-            video:{}
+            video:{},
+            session:null
         }
     },
     mounted() {
-        
+        //getting the websocket session
+        eventBus.$on('webscoketSession',(session)=>{
+            this.session = session
+        });
         //getting the refrence of the camera object
         this.video = this.$refs.video;
         this.startStream();
@@ -50,7 +54,7 @@ export default {
                     //setting the src of the video to the stream
                     this.video.srcObject = stream;
                     this.video.play();
-                    //this.sendToServer(stream);
+                    eventBus.$emit('stream',stream)
                 });
             }
 

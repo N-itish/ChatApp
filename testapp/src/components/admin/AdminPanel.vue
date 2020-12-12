@@ -21,12 +21,6 @@ export default {
       detailedUserData:[]
     };
   },methods:{
-    showUserList(){
-
-    },
-    changePassword(){
-
-    },
     getUserDetails(value){
       this.detailedUserData = value;
     }

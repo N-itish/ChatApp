@@ -9,6 +9,8 @@ import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 
+import java.util.stream.Stream;
+
 @Controller
 public class MessageController {
     @Autowired
@@ -41,5 +43,10 @@ public class MessageController {
            System.out.println("Sending message privately");
            messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()), destination, messageBody.getMessage());
        }
+   }
+
+   @MessageMapping("/videoStream")
+   public void videoStream(Stream stream){
+       System.out.println("binary data recieved");
    }
 }

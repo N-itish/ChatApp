@@ -37,6 +37,10 @@ export default class webSocket{
     send(message){
         this.stompClient.send("/app/private",JSON.stringify(message),{});
     }
+
+    sendVideo(stream){
+        this.stompClient.send("/app/videoStream",stream,{});
+    }
     disconnect(){
         this.stompClient = null;
     }
