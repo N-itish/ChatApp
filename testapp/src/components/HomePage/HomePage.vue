@@ -38,6 +38,7 @@ export default {
         this.webSocketInstance = new webSocket();
         this.webSocketInstance.connect();
         //checking if the reciever is sent from User component picked if not then default 'global' is set in reciever
+        //message is sent to all users if the reciever is set to 'global'
         eventBus.$on('reciever',(reciever)=>{
             if(reciever !== null){
                 this.reciever =reciever;

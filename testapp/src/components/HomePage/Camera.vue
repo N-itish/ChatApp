@@ -1,9 +1,6 @@
 <template>
 <div name = "cameraComp">
     <video id = "userVideo" ref = "video"></video>
-    <button @click="stopVideo">Stop</button>
-    <button @click="startVideo">Start</button>
-    <button @click="takePicture">Picture</button>
    <!-- canvas store the object -->
     <canvas ref="canvas">
     </canvas>
@@ -20,10 +17,18 @@ export default {
         return {
             canvas:null,
             websocketIns : null,
-            recievedImage:null
+            recievedImage: null,
+            reciever : 'global'
         }
     },
     mounted() {
+        //getting the reciever from the Users component
+        eventBus.$on('callUser',(reciever)=>{
+            this.reciever = reciever;
+           this.sendVideo();
+        });
+
+        //getting the returned image from th server 
         eventBus.$on('recievedImage',(image)=>{
             this.recievedImage = image;
         });
@@ -79,7 +84,8 @@ export default {
 
         },
         //take pictures will only work if the startVideo function is called first and it works
-        takePicture(){
+        sendVideo(){
+            this.startVideo();
             var context = this.canvas.getContext("2d");
             var video = this.video;
             var canvas = this.canvas;
@@ -91,14 +97,14 @@ export default {
             
             setInterval(function(){
                 //stop sending image if webcam has been turned off
-                if(this.vide0 === null){
+                if(this.video === null){
                     clearInterval();
                 }
                 context.drawImage(video, 0, 0, 640, 480);
                 var imageUrl = canvas.toDataURL();
                  var messageSender = {
                     message: imageUrl,
-                    reciever: "global"
+                    reciever: this.reciever
                 };
                 websocket.send(messageSender);
             },500);
