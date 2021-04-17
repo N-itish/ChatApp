@@ -7,8 +7,10 @@
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
-        <UserView></UserView>
+        <!-- getting the data from the child 'UserView' then using it in selectedUser method-->
+        <UserView v-on:childToParent = 'selectedUser'></UserView>
         <CameraView></CameraView>
+        <img v-bind:src="image">
     </div>
 </template>
 <script>
@@ -23,6 +25,7 @@ export default {
         'CameraView':Camera,    
         'UserView':Users 
     },
+    
     data(){
         return{
             reciever:"global",
@@ -33,24 +36,16 @@ export default {
             image : null
         };
     },
-    mounted(){
-        
+  
+    mounted(){        
         this.webSocketInstance = new webSocket();
         this.webSocketInstance.connect();
-        //checking if the reciever is sent from User component picked if not then default 'global' is set in reciever
-        //message is sent to all users if the reciever is set to 'global'
-        eventBus.$on('reciever',(reciever)=>{
-            if(reciever !== null){
-                this.reciever =reciever;
-            }
-           
-            console.log(reciever);
-        })
-
-        //setting the message sent by server to the message area
-        eventBus.$on('recievedMessage',(message)=>{
+        //displaying message recieved from websocket in message area
+        eventBus.$on('message',(message)=>{
             if(!message.includes('image')){
                 this.messageList = this.messageList + message;
+            }else{
+                this.image = message;
             }
         });
     
@@ -65,10 +60,13 @@ export default {
             }
             this.webSocketInstance.send(messageSender);
         
-        },getUserName(user,index){
-            this.reciever = user;
-            this.selectedIndex = index;
-            console.log("User selected is :"+this.reciever);
+        },selectedUser(user){
+            //checking if the reciever is sent from User component picked if not then default 'global' is set in reciever
+             //message is sent to all users if the reciever is set to 'global'
+            if(user !== null){
+                this.reciever = user;
+            }
+            console.log('selected user  ='+ this.reciever);
         }
     }
 }

@@ -4,14 +4,13 @@
    <!-- canvas store the object -->
     <canvas ref="canvas">
     </canvas>
-    <img v-bind:src = 'recievedImage'>
-
 </div>
 
 </template>
 <script>
 import { eventBus } from '../../Mediator';
 export default {
+    
     name:"cameraComp",
     data(){
         return {
@@ -21,20 +20,16 @@ export default {
             reciever : 'global'
         }
     },
+ 
     mounted() {
         //getting the reciever from the Users component
         eventBus.$on('callUser',(reciever)=>{
             this.reciever = reciever;
-           this.sendVideo();
-        });
-
-        //getting the returned image from th server 
-        eventBus.$on('recievedImage',(image)=>{
-            this.recievedImage = image;
+            this.sendVideo();
         });
 
         //getting the websocket instance from HomePage
-         eventBus.$on('WebSocketInstance',(instance)=>{
+        eventBus.$on('WebSocketInstance',(instance)=>{
             this.websocketIns = instance;
             console.log(this.websocketIns);
         });
@@ -88,10 +83,11 @@ export default {
             this.startVideo();
             var context = this.canvas.getContext("2d");
             var video = this.video;
+            var reciever = this.reciever;
             var canvas = this.canvas;
             var websocket  = this.websocketIns;
             //setting the canvas width and height
-           context.canvas.width  = 480;
+            context.canvas.width  = 480;
             context.canvas.height = 640;
             //sending image url to server
             
@@ -102,10 +98,12 @@ export default {
                 }
                 context.drawImage(video, 0, 0, 640, 480);
                 var imageUrl = canvas.toDataURL();
+                
                  var messageSender = {
                     message: imageUrl,
-                    reciever: this.reciever
+                    reciever: reciever
                 };
+                
                 websocket.send(messageSender);
             },500);
            

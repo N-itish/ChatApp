@@ -34,6 +34,7 @@ export default {
     created(){
         userAPI.instance.get('/get').then((response)=>{
             this.userData = response.data;
+            console.log(this.userData);
         })
     },methods:{
         edit(index){

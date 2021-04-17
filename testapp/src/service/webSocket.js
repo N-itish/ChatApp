@@ -26,12 +26,7 @@ export default class webSocket{
               console.log(frame);
               console.log(this.socket._transport.url)
               this.stompClient.subscribe("/user/topic/greeting", tick => {
-                    if(tick.body.includes('image')){
-                        eventBus.$emit('recievedImage',tick.body);
-                    }
-                    else{
-                        eventBus.$emit('recievedMessage',tick.body)     
-                    }             
+                        eventBus.$emit('message',tick.body);         
               });
             },
             error => {

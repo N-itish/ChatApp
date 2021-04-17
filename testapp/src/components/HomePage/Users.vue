@@ -23,7 +23,7 @@ export default {
         getUser(reciever,index){
             this.selectedIndex = index;
             //sending selected user from this component to the homepage
-            eventBus.$emit('reciever',reciever);
+            this.$emit('childToParent', reciever)
         },
         findUsers(){
             userAPI.instance.get('/getUsername').then((response)=>{
@@ -33,6 +33,7 @@ export default {
         callUser(reciever){
             //console.log('call use component called')
             eventBus.$emit('callUser',reciever);
+           
         }
     }
 }
