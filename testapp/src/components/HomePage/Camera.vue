@@ -10,10 +10,11 @@
 <script>
 import { eventBus } from '../../Mediator';
 export default {
-    
     name:"cameraComp",
     data(){
         return {
+            image:null,
+            stopInterval:0,
             canvas:null,
             websocketIns : null,
             recievedImage: null,
@@ -27,11 +28,15 @@ export default {
             this.reciever = reciever;
             this.sendVideo();
         });
+        //stopping the video
+        eventBus.$on('stopCall',()=>{
+            console.log('Video stopped');
+            this.stopVideo();
+        });
 
         //getting the websocket instance from HomePage
         eventBus.$on('WebSocketInstance',(instance)=>{
             this.websocketIns = instance;
-            console.log(this.websocketIns);
         });
 
         this.video = this.$refs.video;
@@ -71,7 +76,6 @@ export default {
             var tracks = mediaStream.getTracks();
             //getting all the records in the track and stopping them
             for(var i = 0 ; i< tracks.length;i++){
-                console.log(tracks[i]);
                 //stopping every track 
                 tracks[i].stop();
             }
@@ -90,23 +94,15 @@ export default {
             context.canvas.width  = 480;
             context.canvas.height = 640;
             //sending image url to server
-            
             setInterval(function(){
-                //stop sending image if webcam has been turned off
-                if(this.video === null){
-                    clearInterval();
-                }
                 context.drawImage(video, 0, 0, 640, 480);
-                var imageUrl = canvas.toDataURL();
-                
                  var messageSender = {
-                    message: imageUrl,
+                    message: canvas.toDataURL(),
                     reciever: reciever
-                };
-                
-                websocket.send(messageSender);
+                };    
+                websocket.send(messageSender);  
             },500);
-           
+              
         }
         
    },

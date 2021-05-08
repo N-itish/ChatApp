@@ -73,6 +73,7 @@ export default {
     button{
         margin-top: 45px;
         height: 40px;
+        margin-left:  20px;
         width : 100px;
         float: right;
     }

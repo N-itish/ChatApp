@@ -2,15 +2,17 @@
 
     <div id = "HomePage">
 
-        <div id = "MessageComponent">
+        <div v-if="!call" id = "MessageComponent">
             <textarea id = "MessageArea" v-model="messageList"></textarea><br/>
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
         <!-- getting the data from the child 'UserView' then using it in selectedUser method-->
-        <UserView v-on:childToParent = 'selectedUser'></UserView>
+        <UserView   v-on:childToParent = 'selectedUser'></UserView>
         <CameraView></CameraView>
-        <img v-bind:src="image">
+        <div id = "CallingComponent" v-if="call">
+            <img v-bind:src="image">
+        </div>
     </div>
 </template>
 <script>
@@ -33,7 +35,8 @@ export default {
             messageList:"",
             webSocketInstance : null,
             privateMessage:null,
-            image : null
+            image : "",
+            call: false
         };
     },
   
@@ -46,10 +49,18 @@ export default {
                 this.messageList = this.messageList + message;
             }else{
                 this.image = message;
+                
             }
         });
-    
-    
+
+       //enabling and disabling the calls through events
+        eventBus.$on('callUser',()=>{
+            this.call = true;
+        });
+
+        eventBus.$on('stopCall',()=>{
+            this.call = false;
+        });
         eventBus.$emit('WebSocketInstance',this.webSocketInstance);
     },
     methods:{
@@ -66,8 +77,8 @@ export default {
             if(user !== null){
                 this.reciever = user;
             }
-            console.log('selected user  ='+ this.reciever);
         }
+    
     }
 }
 </script>

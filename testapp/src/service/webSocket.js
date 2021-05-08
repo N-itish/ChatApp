@@ -8,8 +8,8 @@ export default class webSocket{
     constructor(){
         this.socket = new SockJS(url);
         this.stompClient = Stomp.over(this.socket);
-        this.response = "";
-        
+        this.stompClient.debug = function(){};
+
     }
     setAuth(username,password){
        headers = {
@@ -18,20 +18,15 @@ export default class webSocket{
        }
     }
     connect(){
-        
-        //console.log("Inside the webSocket"+headers);
         this.stompClient.connect(
             headers,  
-            frame => {
-              console.log(frame);
-              console.log(this.socket._transport.url)
+            () => {
               this.stompClient.subscribe("/user/topic/greeting", tick => {
                         eventBus.$emit('message',tick.body);         
               });
             },
-            error => {
-              console.log(error);
-              this.disconnect()
+            err => {
+              this.disconnect(err)
             }); 
     }
 
@@ -39,7 +34,8 @@ export default class webSocket{
         this.stompClient.send("/app/private",JSON.stringify(message),{});
     }
 
-    disconnect(){
+    disconnect(err){
+        console.log('disconnected due to error :'+ err);
         this.stompClient = null;
     }
 }
