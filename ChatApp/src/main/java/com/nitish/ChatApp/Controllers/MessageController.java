@@ -1,6 +1,9 @@
 package com.nitish.ChatApp.Controllers;
 
 import com.nitish.ChatApp.Entity.PrivateMessage;
+import com.nitish.ChatApp.Handlers.Handler;
+import com.nitish.ChatApp.Handlers.Impl.CallHandler;
+import com.nitish.ChatApp.Handlers.Impl.TextHandler;
 import com.nitish.ChatApp.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -22,29 +25,27 @@ public class MessageController {
     @Autowired
     private UserRepository userRepo;
 
+    private Handler messageHandler;
 
+    public MessageController() {
+    }
+
+    /*
+     *  In the config the user stored in the SimpUser is the email address of the user
+     *  Client send the receivers username and we find the appropriate email from the database
+     *  If no receivers name given then send message to all users in SimpUser
+     */
    @MessageMapping("/private")
    public void privatelySendMessage(PrivateMessage messageBody) {
-       /*
-        *  In the config the user stored in the SimpUser is the email address of the user
-        *  Client send the receivers username and we find the appropriate email from the database
-        *  If no receivers name given then send message to all users in SimpUser
-        */
-
-       String destination = "topic/greeting";
        System.out.println(messageBody.toString());
-       //if the global is sent as reciver then message is sent to everyone connected
-       if (messageBody.getReciever().equalsIgnoreCase("global")) {
+       if(messageBody.getMessageType().equals("CALL")){
+            messageHandler = new TextHandler(messagingTemplate,userReg,messageBody);
+            messageHandler.returnMessage();
+       }else if(messageBody.getMessageType().equals("TEXT")){
 
-           for (SimpUser user : userReg.getUsers()) {
-               messagingTemplate.convertAndSendToUser(user.getName(), destination, messageBody.getMessage());
-           }
-       } else if(messageBody.getReciever().equalsIgnoreCase("test")){
-           System.out.println(messageBody.getMessage());
-       }else {
-           //convertAndSendToUser automatically adds the "/user/" infront of the destination string
-           System.out.println("Sending message privately");
-           messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()), destination, messageBody.getMessage());
+            messageHandler = new CallHandler(messagingTemplate,userReg,messageBody);
+            messageHandler.returnMessage();
        }
+
    }
 }

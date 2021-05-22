@@ -67,7 +67,8 @@ export default {
         sendMessage(){
             var messageSender = {
                 message:this.message,
-                reciever: this.reciever
+                reciever: this.reciever,
+                messageType: "TEXT"
             }
             this.webSocketInstance.send(messageSender);
         

@@ -98,7 +98,8 @@ export default {
                 context.drawImage(video, 0, 0, 640, 480);
                  var messageSender = {
                     message: canvas.toDataURL(),
-                    reciever: reciever
+                    reciever: reciever,
+                    messageType : "CALL"
                 };    
                 websocket.send(messageSender);  
             },500);
