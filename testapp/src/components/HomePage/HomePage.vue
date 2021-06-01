@@ -13,6 +13,10 @@
         <div id = "CallingComponent" v-if="call">
             <img v-bind:src="image">
         </div>
+        <div id = "DialogBox" v-if="callReq">
+            <p>You are getting a call request from :.{{sender}} Accept?? </p>
+            <button v-on:click = "callAccepted" >Yes</button> <button v-on:click = "callRejected"> No</button>
+        </div>
     </div>
 </template>
 <script>
@@ -34,8 +38,10 @@ export default {
             message:"",
             messageList:"",
             webSocketInstance : null,
-            privateMessage:null,
             image : "",
+            sender: "",
+            callReq:false,
+            callReciever:"",
             call: false
         };
     },
@@ -47,7 +53,13 @@ export default {
         eventBus.$on('message',(message)=>{
             if(!message.includes('image')){
                 this.messageList = this.messageList + message;
-            }else{
+            }
+            else if (message === "CallRequest"){
+                //creating a prompt to ask user permission for call
+                this.callReq = true;    
+                this.sender = message;        
+            }
+            else{
                 this.image = message;
                 
             }
@@ -64,21 +76,38 @@ export default {
         eventBus.$emit('WebSocketInstance',this.webSocketInstance);
     },
     methods:{
-        sendMessage(){
-            var messageSender = {
-                message:this.message,
-                reciever: this.reciever,
-                messageType: "TEXT"
+
+        createMessage(message, reciever, messageType){
+            var messageBody = {
+                "sender": localStorage.getItem("username"),
+                "reciever" : reciever,
+                "message" : message,
+                "messageType" : messageType 
+
             }
-            this.webSocketInstance.send(messageSender);
+            return messageBody;
+        },
+
+        sendMessage(){
+            this.webSocketInstance.send(this.createMessage(this.message,this.reciever, "TEXT"));
+        },
         
-        },selectedUser(user){
+        selectedUser(user){
             //checking if the reciever is sent from User component picked if not then default 'global' is set in reciever
              //message is sent to all users if the reciever is set to 'global'
             if(user !== null){
                 this.reciever = user;
             }
         }
+        ,
+        callAccepted(){
+            this.webSocketInstance.sendMessage(this.createMessage("callAccepted",this.sender,"CALL"));
+            this.callReq = false;
+        },
+        callRejected(){
+            this.callReq = false;
+        }
+            
     
     }
 }

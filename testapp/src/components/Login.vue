@@ -30,6 +30,7 @@ export default {
                 to the server will not require user input for email/password combo  */
             userAPI.setAuthToken(authToken);
             this.websocketInstance = new webSocket();
+            localStorage.setItem("username",this.email);
             /*  storing the username and password in websocket,
                 websocket requires seperate authentication than the normal one*/
             this.websocketInstance.setAuth(this.email,this.password);

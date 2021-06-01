@@ -1,16 +1,39 @@
 package com.nitish.ChatApp.Entity;
 
+import org.springframework.stereotype.Component;
 
-public class PrivateMessage {
+@Component
+public class MessageBody {
+    String sender;
     String reciever;
     String message;
     String messageType;
 
-
-    public PrivateMessage(String reciever,String message,String messageType){
+    public MessageBody(){}
+    public MessageBody(String sender, String reciever, String message, String messageType){
+        this.sender = sender;
         this.reciever = reciever;
         this.message = message;
         this.messageType = messageType;
+
+    }
+
+    public String getSender() {
+        return sender;
+    }
+
+    @Override
+    public String toString() {
+        return "PrivateMessage{" +
+                "sender='" + sender + '\'' +
+                ", reciever='" + reciever + '\'' +
+                ", message='" + message + '\'' +
+                ", messageType='" + messageType + '\'' +
+                '}';
+    }
+
+    public void setSender(String sender) {
+        this.sender = sender;
     }
 
     public String getReciever() {
@@ -19,15 +42,6 @@ public class PrivateMessage {
 
     public String getMessageType() {
         return messageType;
-    }
-
-    @Override
-    public String toString() {
-        return "PrivateMessage{" +
-                "reciever='" + reciever + '\'' +
-                ", message='" + message + '\'' +
-                ", messageType='" + messageType + '\'' +
-                '}';
     }
 
     public void setMessageType(String messageType) {

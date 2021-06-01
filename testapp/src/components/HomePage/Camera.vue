@@ -26,7 +26,9 @@ export default {
         //getting the reciever from the Users component
         eventBus.$on('callUser',(reciever)=>{
             this.reciever = reciever;
-            this.sendVideo();
+            //send request to reciver for call
+            this.callRequest();
+            //this.sendVideo();
         });
         //stopping the video
         eventBus.$on('stopCall',()=>{
@@ -47,6 +49,19 @@ export default {
         
     },
     methods:{
+        createMessage(message,messageType,reciever){
+            var messageBody = {
+                "sender": localStorage.getItem("username"),
+                "reciever" : reciever,
+                "message" : message,
+                "messageType" : messageType 
+            }
+            return messageBody;
+        },
+        callRequest()
+        {
+            this.websocketIns.send(this.createMessage("CallRequested",this.reciever,"TEXT"))
+        },
         startVideo(){
                 this.video = this.$refs.video;
                 var constrains = {
@@ -96,12 +111,7 @@ export default {
             //sending image url to server
             setInterval(function(){
                 context.drawImage(video, 0, 0, 640, 480);
-                 var messageSender = {
-                    message: canvas.toDataURL(),
-                    reciever: reciever,
-                    messageType : "CALL"
-                };    
-                websocket.send(messageSender);  
+                websocket.send(this.createMessage(canvas.toDataURL(),reciever,"CALL"));  
             },500);
               
         }
