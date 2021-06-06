@@ -14,7 +14,7 @@
             <img v-bind:src="image">
         </div>
         <div id = "DialogBox" v-if="callReq">
-            <p>You are getting a call request from :.{{sender}} Accept?? </p>
+            <p>You are getting a call request from : {{from}} Accept?? </p>
             <button v-on:click = "callAccepted" >Yes</button> <button v-on:click = "callRejected"> No</button>
         </div>
     </div>
@@ -39,7 +39,7 @@ export default {
             messageList:"",
             webSocketInstance : null,
             image : "",
-            sender: "",
+            from:"",
             callReq:false,
             callReciever:"",
             call: false
@@ -51,39 +51,40 @@ export default {
         this.webSocketInstance.connect();
         //displaying message recieved from websocket in message area
         eventBus.$on('message',(message)=>{
-            if(!message.includes('image')){
-                this.messageList = this.messageList + message;
+            if(message.includes('image')){
+                 this.image = message;
             }
-            else if (message === "CallRequest"){
+            else if (message.includes("callRequest")){
                 //creating a prompt to ask user permission for call
                 this.callReq = true;    
-                this.sender = message;        
+                this.from = message.split(":")[1];        
             }
-            else{
-                this.image = message;
-                
+            else if(message.includes("callAccepted")){
+                eventBus.$emit("StartCall",this.reciever)
+                console.log(message);
+            }
+            else{             
+                this.messageList = this.messageList + message;
             }
         });
 
        //enabling and disabling the calls through events
-        eventBus.$on('callUser',()=>{
+        /*eventBus.$on('callUser',()=>{
             this.call = true;
         });
 
         eventBus.$on('stopCall',()=>{
             this.call = false;
-        });
+        });*/
         eventBus.$emit('WebSocketInstance',this.webSocketInstance);
     },
     methods:{
 
         createMessage(message, reciever, messageType){
             var messageBody = {
-                "sender": localStorage.getItem("username"),
                 "reciever" : reciever,
                 "message" : message,
                 "messageType" : messageType 
-
             }
             return messageBody;
         },
@@ -101,7 +102,8 @@ export default {
         }
         ,
         callAccepted(){
-            this.webSocketInstance.sendMessage(this.createMessage("callAccepted",this.sender,"CALL"));
+            this.webSocketInstance.send(this.createMessage("callAccepted",this.from,"CALL"));
+            eventBus.$emit("StartCall",this.from)
             this.callReq = false;
         },
         callRejected(){

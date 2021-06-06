@@ -4,37 +4,27 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageBody {
-    String sender;
     String reciever;
     String message;
     String messageType;
 
     public MessageBody(){}
-    public MessageBody(String sender, String reciever, String message, String messageType){
-        this.sender = sender;
+    public MessageBody(String reciever, String message, String messageType){
         this.reciever = reciever;
         this.message = message;
         this.messageType = messageType;
 
     }
 
-    public String getSender() {
-        return sender;
-    }
-
     @Override
     public String toString() {
         return "PrivateMessage{" +
-                "sender='" + sender + '\'' +
                 ", reciever='" + reciever + '\'' +
                 ", message='" + message + '\'' +
                 ", messageType='" + messageType + '\'' +
                 '}';
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
-    }
 
     public String getReciever() {
         return reciever;

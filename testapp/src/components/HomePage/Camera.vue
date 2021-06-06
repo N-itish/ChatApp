@@ -23,12 +23,15 @@ export default {
     },
  
     mounted() {
+        eventBus.$on('StartCall',(reciever)=>{
+            this.reciever = reciever;
+            this.sendVideo();
+        })
         //getting the reciever from the Users component
         eventBus.$on('callUser',(reciever)=>{
             this.reciever = reciever;
             //send request to reciver for call
             this.callRequest();
-            //this.sendVideo();
         });
         //stopping the video
         eventBus.$on('stopCall',()=>{
@@ -40,30 +43,30 @@ export default {
         eventBus.$on('WebSocketInstance',(instance)=>{
             this.websocketIns = instance;
         });
-
-        this.video = this.$refs.video;
-        this.image = this.$refs.image;
-        this.canvas = this.$refs.canvas;
-        this.video.height = 480;
-        this.video.width = 640;
+        this.setRefrences();
         
     },
     methods:{
         createMessage(message,messageType,reciever){
             var messageBody = {
-                "sender": localStorage.getItem("username"),
                 "reciever" : reciever,
                 "message" : message,
                 "messageType" : messageType 
             }
             return messageBody;
         },
+        setRefrences(){
+                this.video = this.$refs.video;
+                this.image = this.$refs.image;
+                this.canvas = this.$refs.canvas;
+                this.video.height = 480;
+                this.video.width = 640;
+        },
         callRequest()
         {
-            this.websocketIns.send(this.createMessage("CallRequested",this.reciever,"TEXT"))
+            this.websocketIns.send(this.createMessage("callRequested","CALL",this.reciever))
         },
         startVideo(){
-                this.video = this.$refs.video;
                 var constrains = {
                 //setting the constraints for the camera
                     video:{

@@ -6,12 +6,6 @@
                 <li v-bind:class="{'selected': index == selectedIndex}" v-on:click ="getUser(user,index)">{{user}}</li>
                 <button v-on:click ="callUser(user)">call</button><button v-on:click ="cancelCall(user)">stop</button>
             </ul><br>
-            <div id = "Groups">
-                <p>create group</p>
-                <input v-model = "member" id="member" type ="text"/><button v-on:click = "addUser()">add</button>
-                {{groupMembers}}
-                <button v-on:click = "createGroup()">Create</button>
-            </div>
     </div>
 </template>
 <script>
@@ -44,11 +38,6 @@ export default {
            
         },cancelCall(){
             eventBus.$emit('stopCall');
-        }, addUser(){
-            this.groupMembers.push(this.member);
-            console.log(this.groupMembers);
-        },createGroup(){
-
         }
     } 
 }
