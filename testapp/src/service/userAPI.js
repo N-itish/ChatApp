@@ -1,8 +1,10 @@
 import axios from 'axios'
 
+//server url is taken from the environment vairable
 
 const instance = axios.create({
-        baseURL:'http://localhost:8090/user'
+        baseURL: process.env.VUE_APP_SERVER_API + 'user',
+        headers:{"Access-Control-Allow-Origin":"*"}
 })
       
 const setAuthToken = function(token){

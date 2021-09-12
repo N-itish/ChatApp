@@ -11,7 +11,7 @@
 <script>
 import userAPI from '../service/userAPI'
 import webSocket from '../service/webSocket'
-import store from '../service/store'
+
 export default {
     name:"LoginComponent",
     data(){
@@ -20,6 +20,9 @@ export default {
             password:"",
             websocketInstance :null
         }
+    },
+    mounted(){
+        console.log(process.env.VUE_APP_SERVER_API);
     },
     methods:{
         SignIn(){
@@ -30,14 +33,14 @@ export default {
                 to the server will not require user input for email/password combo  */
             userAPI.setAuthToken(authToken);
             this.websocketInstance = new webSocket();
-            localStorage.setItem("username",this.email);
+            
             /*  storing the username and password in websocket,
                 websocket requires seperate authentication than the normal one*/
             this.websocketInstance.setAuth(this.email,this.password);
-             userAPI.instance.post('/login',{}).then((response)=>{
-                 localStorage.setItem("userAuthentication",response.data);
-                 store.authentication = 'user';
-                 this.$router.push('/')
+             userAPI.instance.post('/login',{}).then(()=>{
+                 //authericating the user once the server responds
+                 this.$store.commit('setLogin');
+                 this.$router.push('/');
             });
         },
         SignUp(){

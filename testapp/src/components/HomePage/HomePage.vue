@@ -1,7 +1,5 @@
 <template>
-
     <div id = "HomePage">
-
         <div v-if="!call" id = "MessageComponent">
             <textarea id = "MessageArea" v-model="messageList"></textarea><br/>
             <input    id = "Message"    type="text" v-model="message">
@@ -9,7 +7,6 @@
         </div>
         <!-- getting the data from the child 'UserView' then using it in selectedUser method-->
         <UserView   v-on:childToParent = 'selectedUser'></UserView>
-        <CameraView></CameraView>
         <div id = "CallingComponent" v-if="call">
             <img v-bind:src="image">
         </div>
@@ -20,7 +17,6 @@
     </div>
 </template>
 <script>
-import Camera from '../HomePage/Camera';
 import Users from '../HomePage/Users';
 import {eventBus} from '../../Mediator';
 import webSocket from '../../service/webSocket';
@@ -28,16 +24,14 @@ import webSocket from '../../service/webSocket';
 export default {
     name:"HomePage",
     components:{
-        'CameraView':Camera,    
         'UserView':Users 
     },
-    
     data(){
         return{
             reciever:"global",
             message:"",
             messageList:"",
-            webSocketInstance : null,
+            webSocketIns : null,
             image : "",
             from:"",
             callReq:false,
@@ -45,10 +39,12 @@ export default {
             call: false
         };
     },
-  
+   
     mounted(){        
-        this.webSocketInstance = new webSocket();
-        this.webSocketInstance.connect();
+        this.webSocketIns = new webSocket();
+        this.webSocketIns.connect();
+        this.$store.commit('initWebSocket', this.webSocketIns);
+
         //displaying message recieved from websocket in message area
         eventBus.$on('message',(message)=>{
             if(message.includes('image')){
@@ -56,27 +52,18 @@ export default {
             }
             else if (message.includes("callRequest")){
                 //creating a prompt to ask user permission for call
-                this.callReq = true;    
+                this.callReq = true;  
                 this.from = message.split(":")[1];        
             }
             else if(message.includes("callAccepted")){
-                eventBus.$emit("StartCall",this.reciever)
-                console.log(message);
+               console.log('call has been accepted!!');
             }
             else{             
                 this.messageList = this.messageList + message;
             }
         });
 
-       //enabling and disabling the calls through events
-        /*eventBus.$on('callUser',()=>{
-            this.call = true;
-        });
-
-        eventBus.$on('stopCall',()=>{
-            this.call = false;
-        });*/
-        eventBus.$emit('WebSocketInstance',this.webSocketInstance);
+        
     },
     methods:{
 
@@ -90,7 +77,7 @@ export default {
         },
 
         sendMessage(){
-            this.webSocketInstance.send(this.createMessage(this.message,this.reciever, "TEXT"));
+            this.webSocketIns.send(this.createMessage(this.message,this.reciever, "TEXT"));
         },
         
         selectedUser(user){
@@ -102,12 +89,10 @@ export default {
         }
         ,
         callAccepted(){
-            this.webSocketInstance.send(this.createMessage("callAccepted",this.from,"CALL"));
-            eventBus.$emit("StartCall",this.from)
-            this.callReq = false;
+            this.$router.push({name:"video",params:{callAccepted: true}})
         },
         callRejected(){
-            this.callReq = false;
+            alert('you rejected the call')
         }
             
     

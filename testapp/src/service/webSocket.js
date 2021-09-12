@@ -1,7 +1,9 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import {eventBus}  from '../Mediator';
-const url = "http://localhost:8090/gs-guide-websocket";
+
+//Server url taken from the .env file
+const url = process.env.VUE_APP_SERVER_API + "gs-guide-websocket";
 var headers;
 export default class webSocket{
     static headers = [];

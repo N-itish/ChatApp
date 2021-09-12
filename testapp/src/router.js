@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import HomePage from "./components/HomePage/HomePage.vue";
 //import Camera from "./components/video/Camera.vue";
-import store from './service/store';
+import Store from './store';
 
 Vue.use(Router);
 
@@ -57,14 +57,20 @@ const router = new Router({
             path:"/register",
             name:"register",
             component:()=> import(/* webpackChunkName: "register" */ "./components/Registration.vue")
+        },
+        {
+            path:"/video",
+            name:"video",
+            component:()=> import(/* webpackChunkName: "video" */ "./components/HomePage/Video.vue"),
+            meta: {loginRequired: true}
         }
     ]
 });
 
 router.beforeEach((to,from,next)=>{
+    console.log(Store.getters.authenticated);
     if(to.meta.loginRequired){
-        console.log(store.authentication);
-        if(store.authentication == null){
+        if(!Store.getters.authenticated){
             next({
                 name:"login",
             });

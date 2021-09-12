@@ -126,4 +126,8 @@ export default {
     #userVideo{
         display: none;
     }
+
+    .background{
+        
+    }
 </style>
