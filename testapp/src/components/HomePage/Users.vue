@@ -42,5 +42,9 @@ export default {
  .selected{
         background-color: black;
         color: white;
+
+    }
+    #userview{
+        float:right;
     }
 </style>

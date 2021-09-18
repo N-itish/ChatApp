@@ -1,6 +1,7 @@
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
-import {eventBus}  from '../Mediator';
+import Store from '../store';
+
 
 //Server url taken from the .env file
 const url = process.env.VUE_APP_SERVER_API + "gs-guide-websocket";
@@ -11,7 +12,6 @@ export default class webSocket{
         this.socket = new SockJS(url);
         this.stompClient = Stomp.over(this.socket);
         this.stompClient.debug = function(){};
-
     }
     setAuth(username,password){
        headers = {
@@ -24,7 +24,13 @@ export default class webSocket{
             headers,  
             () => {
               this.stompClient.subscribe("/user/topic/greeting", tick => {
-                        eventBus.$emit('message',tick.body);         
+                    //console.log(tick);
+                    if(tick.body.split(':')[0] == 'callRequest' ){
+                        Store.commit('setCommand',tick.body.split(':')[1])
+                        console.log(tick.body.split(':'))
+                    }
+                    Store.commit('setMessage',tick.body); 
+                   // console.log(Store.getters.webSockRtrnData); 
               });
             },
             err => {

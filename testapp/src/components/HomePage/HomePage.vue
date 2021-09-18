@@ -6,19 +6,16 @@
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
         <!-- getting the data from the child 'UserView' then using it in selectedUser method-->
-        <UserView   v-on:childToParent = 'selectedUser'></UserView>
-        <div id = "CallingComponent" v-if="call">
-            <img v-bind:src="image">
-        </div>
-        <div id = "DialogBox" v-if="callReq">
-            <p>You are getting a call request from : {{from}} Accept?? </p>
-            <button v-on:click = "callAccepted" >Yes</button> <button v-on:click = "callRejected"> No</button>
+        <UserView id="userview"  v-on:childToParent = 'selectedUser'></UserView>
+        <div id = "callNotification" v-if="!callReq" > 
+            You are getting call from : {{from}} <br>
+            <button>accept</button> <button> reject</button>
         </div>
     </div>
 </template>
 <script>
 import Users from '../HomePage/Users';
-import {eventBus} from '../../Mediator';
+import store from '../../store';
 import webSocket from '../../service/webSocket';
 
 export default {
@@ -30,40 +27,25 @@ export default {
         return{
             reciever:"global",
             message:"",
-            messageList:"",
             webSocketIns : null,
-            image : "",
-            from:"",
-            callReq:false,
-            callReciever:"",
-            call: false
         };
     },
-   
+   computed:{
+       messageList(){
+           //message from sender is pulled from vuex store
+           return store.getters.textMessage;
+       },
+       from(){
+           return store.getters.specialCommand;
+       },
+       callReq(){
+           return store.getters.specialCommand.length > 0;
+       }
+   },
     mounted(){        
         this.webSocketIns = new webSocket();
         this.webSocketIns.connect();
         this.$store.commit('initWebSocket', this.webSocketIns);
-
-        //displaying message recieved from websocket in message area
-        eventBus.$on('message',(message)=>{
-            if(message.includes('image')){
-                 this.image = message;
-            }
-            else if (message.includes("callRequest")){
-                //creating a prompt to ask user permission for call
-                this.callReq = true;  
-                this.from = message.split(":")[1];        
-            }
-            else if(message.includes("callAccepted")){
-               console.log('call has been accepted!!');
-            }
-            else{             
-                this.messageList = this.messageList + message;
-            }
-        });
-
-        
     },
     methods:{
 
@@ -82,7 +64,7 @@ export default {
         
         selectedUser(user){
             //checking if the reciever is sent from User component picked if not then default 'global' is set in reciever
-             //message is sent to all users if the reciever is set to 'global'
+            //message is sent to all users if the reciever is set to 'global'
             if(user !== null){
                 this.reciever = user;
             }
@@ -101,7 +83,9 @@ export default {
 </script>
 <style scoped>
     #MessageComponent{
-        font-size: 20px;float:left;
+        font-size: 20px;
+        position:absolute;
+        left: 30%;
     }
     #MessageArea{
         font-size: 20px;
@@ -135,5 +119,15 @@ export default {
     .selected{
         background-color: black;
         color: white;
+    }
+    #callNotification{
+        border: 1px solid black;
+        padding-top: 20px;
+        padding-right: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        display: inline-block;
+        left:50%;
+        top:50%;
     }
 </style>

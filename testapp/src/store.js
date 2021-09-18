@@ -5,8 +5,10 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
     state:{
-        webSocketIns: null,
-        authenticated : false
+        webSocketIns    : null,
+        authenticated   : false,
+        textMessage     : '',
+        specialCommand  : ''
     },
     mutations:{ 
         initWebSocket(state, webSocketIns){
@@ -14,11 +16,19 @@ const store = new Vuex.Store({
         },
         setLogin(state){
             state.authenticated = true;
+        },
+        setMessage(state,message){
+            state.textMessage = message;
+        },
+        setCommand(state,command){
+            state.specialCommand = command;
         }
     },
     getters:{
         webSocketIns    : state => state.webSocketIns,
-        authenticated   : state => state.authenticated
+        authenticated   : state => state.authenticated,
+        textMessage     : state => state.textMessage,
+        specialCommand  : state => state.specialCommand
     }
 });
 
