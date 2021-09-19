@@ -1,15 +1,15 @@
 <template>
     <div id = "HomePage">
-        <div v-if="!call" id = "MessageComponent">
+        <div id = "MessageComponent">
             <textarea id = "MessageArea" v-model="messageList"></textarea><br/>
             <input    id = "Message"    type="text" v-model="message">
             <button   id = "SendButton" v-on:click="sendMessage" >Send</button>
         </div>
         <!-- getting the data from the child 'UserView' then using it in selectedUser method-->
         <UserView id="userview"  v-on:childToParent = 'selectedUser'></UserView>
-        <div id = "callNotification" v-if="!callReq" > 
+        <div id = "callNotification" v-if="from.length" > 
             You are getting call from : {{from}} <br>
-            <button>accept</button> <button> reject</button>
+            <button v-on:click = "callAccepted(from)">accept</button> <button> reject</button>
         </div>
     </div>
 </template>
@@ -38,9 +38,6 @@ export default {
        from(){
            return store.getters.specialCommand;
        },
-       callReq(){
-           return store.getters.specialCommand.length > 0;
-       }
    },
     mounted(){        
         this.webSocketIns = new webSocket();
@@ -70,8 +67,9 @@ export default {
             }
         }
         ,
-        callAccepted(){
-            this.$router.push({name:"video",params:{callAccepted: true}})
+        callAccepted(from){
+            
+            this.$router.push({name:"video",params:{sender: from}})
         },
         callRejected(){
             alert('you rejected the call')

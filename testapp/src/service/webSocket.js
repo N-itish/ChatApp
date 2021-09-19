@@ -25,11 +25,13 @@ export default class webSocket{
             () => {
               this.stompClient.subscribe("/user/topic/greeting", tick => {
                     //console.log(tick);
-                    if(tick.body.split(':')[0] == 'callRequest' ){
+                    if(tick.body.split(':')[0] == 'callRequest' || tick.body.split(':')[0] == 'callAccepted'){
                         Store.commit('setCommand',tick.body.split(':')[1])
                         console.log(tick.body.split(':'))
+                    }else
+                    {
+                        Store.commit('setMessage',tick.body); 
                     }
-                    Store.commit('setMessage',tick.body); 
                    // console.log(Store.getters.webSockRtrnData); 
               });
             },

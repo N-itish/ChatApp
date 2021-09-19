@@ -100,7 +100,8 @@ export default{
         //getting the websocket instance from the vuex store
         this.websocketIns = Store.getters.webSocketIns; 
         console.log(this.websocketIns);
-        if(this.$route.params.callAccepted){
+        if(this.$route.params.sender){
+            this.reciever = this.$route.params.sender;
             this.websocketIns.send(this.messageBuilder('callAccepted'))
         }else{
             this.startVideo();
