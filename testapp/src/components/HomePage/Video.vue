@@ -23,34 +23,40 @@ export default{
             websocketIns : null
         }
     },
+    computed:{
+       specialCommand(){
+           return Store.getters.specialCommand;
+       }
+    },
+    watch:{
+        specialCommand(newValues){
+            if(newValues == 'callAccepted'){
+                this.startVideo();
+            }
+        }
+    },
     methods:{
         hasMediaDevices() {
             return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
         },
  
         startVideo(){
-            if(this.callRequest())
-            {
                 this.callID = 1234;
                 this.video = this.$refs.video;
+                this.canvas = this.$refs.clientImage;
                 console.log(this.video);
                 if(this.hasMediaDevices()){
                     navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
                         this.video.srcObject = stream;
                     });
-                    this.paintCanvas(this.video);   
+                    this.paintCanvas(this.video,this.canvas);   
                 }
                 else{
                     alert("no media devices found!!!");
-                }
-            }
-            else{
-                alert('call rejected by the reciever!!!')
-            }
+                } 
         },
 
-        paintCanvas(videoInput){
-            var canvas = this.$refs.clientImage;
+        paintCanvas(videoInput,canvas){
             var ctx = canvas.getContext("2d");
             var self = this;
             var video = videoInput;
@@ -99,12 +105,12 @@ export default{
         
         //getting the websocket instance from the vuex store
         this.websocketIns = Store.getters.webSocketIns; 
-        console.log(this.websocketIns);
-        if(this.$route.params.sender){
-            this.reciever = this.$route.params.sender;
+        if(this.$route.params.callRequested){
+            this.reciever = this.$route.params.callRequested;
+            this.websocketIns.send(this.messageBuilder('callRequested'))
+        }else if(this.$route.params.callAccepted){
+            this.reciever = this.$route.params.callAccepted;
             this.websocketIns.send(this.messageBuilder('callAccepted'))
-        }else{
-            this.startVideo();
         }
     }
 }

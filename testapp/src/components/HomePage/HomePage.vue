@@ -69,7 +69,7 @@ export default {
         ,
         callAccepted(from){
             
-            this.$router.push({name:"video",params:{sender: from}})
+            this.$router.push({name:"video",params:{callAccepted: from}})
         },
         callRejected(){
             alert('you rejected the call')

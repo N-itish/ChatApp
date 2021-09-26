@@ -32,8 +32,8 @@ export default {
         },
         callUser(reciever){
             //routing to the videocall view with the reciever name
-            console.log(reciever);
-            this.$router.push({name  : 'video', params:{callReciever: reciever} });
+            console.log("from user component:"+reciever);
+            this.$router.push({name  : 'video', params:{callRequested: reciever} });
         }
     } 
 }
