@@ -26,13 +26,32 @@ export default{
     computed:{
        specialCommand(){
            return Store.getters.specialCommand;
+       },
+       message(){
+           return Store.getters.textMessage;
        }
+
     },
     watch:{
         specialCommand(newValues){
             if(newValues == 'callAccepted'){
+                this.callInitiated = true;
                 this.startVideo();
             }
+        },
+        /*
+            using immediate in this since the canvas
+            will require the vue component to be loaded otherwise
+            it will set undefined in canvas refrence
+        */
+        message:{
+            handler: function (newValues) {
+                console.log(newValues);
+                var canvas = this.$refs.ServerImage;
+                this.paintCanvas(canvas, newValues, "MESSAGE");
+            },
+            immediate: true
+            
         }
     },
     methods:{
@@ -49,28 +68,43 @@ export default{
                     navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
                         this.video.srcObject = stream;
                     });
-                    this.paintCanvas(this.video,this.canvas);   
+                    this.paintCanvas(this.canvas,this.video,'CAMERA');   
                 }
                 else{
                     alert("no media devices found!!!");
                 } 
         },
-
-        paintCanvas(videoInput,canvas){
+        paintCanvas(canvas, source, sourceType) {
             var ctx = canvas.getContext("2d");
-            var self = this;
-            var video = videoInput;
-            ctx.canvas.width  = 480;
+            ctx.canvas.width = 480;
             ctx.canvas.height = 640;
-            //refreshing the canvas every 2 secs
-            
-            var intervalId = setInterval(() => {
-                if(self.callID == null){
-                    clearInterval(intervalId);
-                } 
-                ctx.drawImage(video,0,0,640, 480);
-                this.sendImage(canvas.toDataURL()) ;
-            },2000)
+            if(sourceType === 'MESSAGE'){
+                this.paintCanvasFromMessage(ctx,source)
+            }else if(sourceType === 'CAMERA'){
+                this.paintCanvasFromCamera(ctx,canvas,source)
+            }else{
+                alert('Source type is not built');
+            }
+        },
+        paintCanvasFromMessage(ctx,source){
+            var image = new Image();
+            image.onload = function() {
+                ctx.drawImage(image, 69, 50);
+            };
+            image.src = source
+      
+        },
+        paintCanvasFromCamera(ctx,canvas,source){
+            var self = this;
+            var video = source;
+           //refreshing the canvas every 2 secs
+              var intervalId = setInterval(() => {
+                    if(self.callID == null){
+                        clearInterval(intervalId);
+                    } 
+                    ctx.drawImage(video,0,0,640, 480);
+                    this.sendImage(canvas.toDataURL()) ;
+                },2000)
         },
         sendImage(imageString){
             this.websocketIns.send(this.messageBuilder(imageString));
@@ -109,8 +143,10 @@ export default{
             this.reciever = this.$route.params.callRequested;
             this.websocketIns.send(this.messageBuilder('callRequested'))
         }else if(this.$route.params.callAccepted){
+
             this.reciever = this.$route.params.callAccepted;
             this.websocketIns.send(this.messageBuilder('callAccepted'))
+
         }
     }
 }
@@ -119,8 +155,5 @@ export default{
     #videoCall{
         background-color: white;
         color :black;
-    }
-    #serverImage{
-        text-align: right;
     }
 </style>

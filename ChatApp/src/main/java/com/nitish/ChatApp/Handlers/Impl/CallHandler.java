@@ -37,6 +37,7 @@ public class CallHandler implements Handler {
             messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()), DESTINATION,
                     "callAccepted");
         }else{
+
             messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()), DESTINATION,
                     messageBody.getMessage());
         }

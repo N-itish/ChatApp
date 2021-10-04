@@ -26,7 +26,7 @@ export default class webSocket{
               this.stompClient.subscribe("/user/topic/greeting", tick => {
                     //console.log(tick);
                     if(tick.body.split(':')[0] == 'callRequest'){
-                        Store.commit('setCommand',tick.body.split(':')[1])
+                        Store.commit('setSender',tick.body.split(':')[1])
                         //console.log(tick.body.split(':'))
                     }else if(tick.body == 'callAccepted'){
                         Store.commit('setCommand','callAccepted')

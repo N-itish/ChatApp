@@ -33,7 +33,6 @@ public class MessageController {
      */
    @MessageMapping("/private")
    public void privatelySendMessage(MessageBody messageBody) {
-       System.out.println(messageBody.toString());
        if(messageBody.getMessageType().equals("TEXT")){
             messageHandler = new TextHandler(messagingTemplate,userReg,userRepo,messageBody);
             messageHandler.returnMessage();

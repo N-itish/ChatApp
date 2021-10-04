@@ -9,7 +9,7 @@ const store = new Vuex.Store({
         authenticated   : false,
         textMessage     : '',
         specialCommand  : '',
-        baset64Image    : ''
+        sender          : '',
     },
     mutations:{ 
         initWebSocket(state, webSocketIns){
@@ -24,16 +24,16 @@ const store = new Vuex.Store({
         setCommand(state,command){
             state.specialCommand = command;
         },
-        setImage(state,image){
-            state.baset64Image = image;
+        setSender(state,sender){
+            state.sender = sender;
         }
     },
     getters:{
         webSocketIns    : state => state.webSocketIns,
         authenticated   : state => state.authenticated,
         textMessage     : state => state.textMessage,
-        baset64Image    : state => state.baset64Image,
-        specialCommand  : state => state.specialCommand
+        specialCommand  : state => state.specialCommand,
+        sender          : state => state.sender
     }
 });
 

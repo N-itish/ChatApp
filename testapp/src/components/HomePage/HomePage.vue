@@ -36,7 +36,7 @@ export default {
            return store.getters.textMessage;
        },
        from(){
-           return store.getters.specialCommand;
+           return store.getters.sender;
        },
    },
     mounted(){        
@@ -68,8 +68,9 @@ export default {
         }
         ,
         callAccepted(from){
-            
-            this.$router.push({name:"video",params:{callAccepted: from}})
+            store.commit('setCommand','retrieveMessage');
+            console.log(store.getters.specialCommand);
+            this.$router.push({name:"video",params:{callAccepted: from}});
         },
         callRejected(){
             alert('you rejected the call')
