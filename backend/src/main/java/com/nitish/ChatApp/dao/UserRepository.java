@@ -1,6 +1,7 @@
-package com.nitish.ChatApp.Repository;
+package com.nitish.ChatApp.dao;
 
-import com.nitish.ChatApp.Entity.UserData;
+import com.nitish.ChatApp.Entity.Users;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -8,10 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface UserRepository extends CrudRepository<UserData,Integer> {
+public interface UserRepository extends JpaRepository<Users,Integer> {
 
-    List<UserData> findAll();
-    UserData findByEmail(String email);
+    Users findByEmail(String email);
 
     @Query("Select a.userName from UserData a where LOWER(a.email) = LOWER(:email)")
     String findUserNameByEmail(@Param("email") String email);

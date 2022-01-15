@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="userdata")
-public class UserData {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userId")
@@ -22,10 +22,10 @@ public class UserData {
     private String gender;
     @Temporal(TemporalType.DATE)
     private Date dob;
-    public UserData(){
+    public Users(){
         
     }
-    public UserData(String userName, String role){
+    public Users(String userName, String role){
         this.userName = userName;
         this.role = role;
     }

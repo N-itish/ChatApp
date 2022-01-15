@@ -1,6 +1,6 @@
-package com.nitish.ChatApp.Services;
+package com.nitish.ChatApp.Components;
 
-import com.nitish.ChatApp.Entity.UserData;
+import com.nitish.ChatApp.Entity.Users;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,14 +9,14 @@ import java.util.Collection;
 import java.util.List;
 
 public class MyPrincipal implements UserDetails {
-    UserData user;
-    public MyPrincipal(UserData user){
+    Users user;
+    public MyPrincipal(Users user){
         this.user = user;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> auths = new java.util.ArrayList<SimpleGrantedAuthority>();
+        List<SimpleGrantedAuthority> auths = new java.util.ArrayList<>();
         auths.add(new SimpleGrantedAuthority(user.getRole()));
         return auths;
     }

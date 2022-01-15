@@ -4,7 +4,7 @@ import com.nitish.ChatApp.Entity.MessageBody;
 import com.nitish.ChatApp.Handlers.Handler;
 import com.nitish.ChatApp.Handlers.Impl.CallHandler;
 import com.nitish.ChatApp.Handlers.Impl.TextHandler;
-import com.nitish.ChatApp.Repository.UserRepository;
+import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;

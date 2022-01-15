@@ -1,15 +1,15 @@
-package com.nitish.ChatApp.Services;
+package com.nitish.ChatApp.Components;
 
-
-import com.nitish.ChatApp.Entity.UserData;
-import com.nitish.ChatApp.Repository.UserRepository;
+import com.nitish.ChatApp.Entity.Users;
+import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+
+@Component
 public class MyUserDetailService implements UserDetailsService{
     @Autowired
     private UserRepository userRepo;
@@ -17,7 +17,7 @@ public class MyUserDetailService implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        UserData user = userRepo.findByEmail(email);
+        Users user = userRepo.findByEmail(email);
         if(user == null){
             throw new UsernameNotFoundException(email);
         }

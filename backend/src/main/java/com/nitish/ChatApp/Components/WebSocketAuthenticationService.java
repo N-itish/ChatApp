@@ -1,24 +1,24 @@
-package com.nitish.ChatApp.Services;
+package com.nitish.ChatApp.Components;
 
-import com.nitish.ChatApp.Entity.UserData;
-import com.nitish.ChatApp.Repository.UserRepository;
+import com.nitish.ChatApp.Entity.Users;
+import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import java.util.Collections;
 
-@Service
+@Component
 public class WebSocketAuthenticationService {
     @Autowired
     private UserRepository userRepo;
 
     public UsernamePasswordAuthenticationToken authenticateUser(String username,String password) throws
             AuthenticationException {
-        UserData user = userRepo.findByEmail(username);
+        Users user = userRepo.findByEmail(username);
         if(username == null || password == null){
             throw new AuthenticationCredentialsNotFoundException("UserName or password is empty");
         }
