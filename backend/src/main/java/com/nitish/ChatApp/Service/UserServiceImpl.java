@@ -3,9 +3,10 @@ package com.nitish.ChatApp.Service;
 import com.nitish.ChatApp.Entity.Users;
 import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class UserServiceImpl implements UserService{
 
     private UserRepository userRepo;

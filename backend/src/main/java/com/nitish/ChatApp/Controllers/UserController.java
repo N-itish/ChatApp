@@ -10,14 +10,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-    @Autowired
+
     private UserService userService;
 
+    @Autowired
     public UserController(UserService userService){
         this.userService = userService;
     }
 
-    //only returning the user names not the entire details
+
     @GetMapping("/users")
     public List<Users> userList(){
         return userService.getAll();
@@ -34,4 +35,13 @@ public class UserController {
         return "user registered";
     }
 
+    @PostMapping("/login")
+    public Boolean loginUser(){
+        return true;
+    }
+
+    @GetMapping("/test")
+    public String hello(){
+        return "Hello";
+    }
 }

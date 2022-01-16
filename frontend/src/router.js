@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import HomePage from "./components/HomePage/HomePage.vue";
-//import Camera from "./components/video/Camera.vue";
 import Store from './store';
 
 Vue.use(Router);
@@ -47,11 +46,6 @@ const router = new Router({
             path:"/register",
             name:"register",
             component: ()=> import(/* webpackChunkName: "register" */ "./components/Registration.vue")
-        },
-        {
-            path:"/camera",
-            name:"camera",
-            component: ()=> import(/* webpackChunkName: "camera" */ "./components/HomePage/Camera.vue")
         },
         {
             path:"/register",

@@ -3,7 +3,7 @@ import axios from 'axios'
 //server url is taken from the environment vairable
 
 const instance = axios.create({
-        baseURL: process.env.VUE_APP_SERVER_API + 'user',
+        baseURL: process.env.VUE_APP_SERVER_API + 'api',
         headers:{"Access-Control-Allow-Origin":"*"}
 })
       
