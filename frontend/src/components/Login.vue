@@ -19,10 +19,6 @@
         {{ error }}
       </div>
     </div>
-    <!--checking if both email or password is null -->
-    <div class="errorPosition" v-if="!email || !password">
-      <div class="alert alert-danger">either email or password is null</div>
-    </div>
   </div>
 </template>
 <script>
@@ -32,8 +28,8 @@ export default {
   name: "LoginComponent",
   data() {
     return {
-      email: null,
-      password: null,
+      email: "",
+      password: "",
       error: "",
       websocketInstance: null,
     };
@@ -67,11 +63,15 @@ export default {
           })
           .catch(function (error) {
             console.log(error);
-            self.error =
-              error.response.status +
-              " please check your username and password!!";
-            console.log(self.error);
+            if(!error.response ){
+             self.error = "Network Error, pls try again later"
+            }else{
+               self.error = error.response.status +" please check your username and password!!";
+              
+            }
           });
+      }else{
+        this.error =  "either email or password is empty"
       }
     },
     SignUp() {
