@@ -13,6 +13,8 @@
     "core-js": "^3.6.5",
     "sockjs-client": "^1.5.0",
     "vue": "^2.6.11",
+    "vue-class-component": "^7.2.3",
+    "vue-property-decorator": "^9.1.2",
     "vue-router": "^3.4.8",
     "vuex": "^3.6.2",
     "webstomp-client": "^1.2.6"
@@ -20,9 +22,13 @@
   "devDependencies": {
     "@babel/polyfill": "^7.7.0",
     "@techiediaries/vue-cli-plugin-bootstrap": "~0.1.0",
+    "@typescript-eslint/eslint-plugin": "^2.33.0",
+    "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "^4.5.15",
     "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-typescript": "^5.0.2",
     "babel-eslint": "^10.1.0",
     "bootstrap": "^4.3.1",
     "eslint": "^6.7.2",
@@ -32,6 +38,7 @@
     "portal-vue": "^2.1.6",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
+    "typescript": "~4.1.5",
     "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
@@ -41,10 +48,11 @@
     },
     "extends": [
       "plugin:vue/essential",
-      "eslint:recommended"
+      "eslint:recommended",
+      "@vue/typescript"
     ],
     "parserOptions": {
-      "parser": "babel-eslint"
+      "parser": "@typescript-eslint/parser"
     },
     "rules": {}
   },

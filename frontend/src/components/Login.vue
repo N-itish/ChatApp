@@ -43,39 +43,38 @@ export default {
 
       if (this.email.length > 0 && this.password.length > 0) {
         var self = this;
-        /*  converting the email password combination into base64 
-                encoded string used for basic authentication with server    */
-        const authToken = "Basic " + btoa(this.email + ":" + this.password);
-        /*  storing it in axios so that after login so that other request 
-                to the server will not require user input for email/password combo  */
-        userAPI.setAuthToken(authToken);
-        this.websocketInstance = new webSocket();
-
-        /*  storing the username and password in websocket,
-                websocket requires seperate authentication than the normal one*/
-        this.websocketInstance.setAuth(this.email, this.password);
+        this.setTokens(this.email, this.password);
         userAPI.instance
-          .post("/login", {})
-          .then(() => {
+          .post("/login", {}).then(() => {
             //authericating the user once the server responds
             this.$store.commit("setLogin");
             this.$router.push("/");
-          })
-          .catch(function (error) {
-            console.log(error);
-            if(!error.response ){
-             self.error = "Network Error, pls try again later"
-            }else{
-               self.error = error.response.status +" please check your username and password!!";
-              
+          }).catch(function (error) {
+            if (!error.response) {
+              self.error = "Network Error, pls try again later";
+            } else {
+              self.error = error.response.status +" please check your username and password!!";
             }
           });
-      }else{
-        this.error =  "either email or password is empty"
+      } else {
+        this.error = "either email or password is empty";
       }
     },
     SignUp() {
       this.$router.push("/register");
+    },
+    setTokens(email, password) {
+      /*  converting the email password combination into base64 
+                    encoded string used for basic authentication with server    */
+      const authToken = "Basic " + btoa(email + ":" + password);
+      /*  storing it in axios so that after login so that other request 
+                    to the server will not require user input for email/password combo  */
+      userAPI.setAuthToken(authToken);
+      this.websocketInstance = new webSocket();
+
+      /*  storing the username and password in websocket,
+                    websocket requires seperate authentication than the normal one*/
+      this.websocketInstance.setAuth(email, password);
     },
   },
 };

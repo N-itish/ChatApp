@@ -17,7 +17,7 @@
 import Users from '../HomePage/Users';
 import store from '../../store';
 import webSocket from '../../service/webSocket';
-
+import {Message} from '../../models/Message.ts'
 export default {
     name:"HomePage",
     components:{
@@ -45,18 +45,8 @@ export default {
         this.$store.commit('initWebSocket', this.webSocketIns);
     },
     methods:{
-
-        createMessage(message, reciever, messageType){
-            var messageBody = {
-                "reciever" : reciever,
-                "message" : message,
-                "messageType" : messageType 
-            }
-            return messageBody;
-        },
-
         sendMessage(){
-            this.webSocketIns.send(this.createMessage(this.message,this.reciever, "TEXT"));
+            this.webSocketIns.send(new Message(this.message,this.reciever,'TEXT'));
         },
         
         selectedUser(user){

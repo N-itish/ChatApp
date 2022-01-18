@@ -3,28 +3,20 @@
     <router-view/>
   </div>
 </template>
-<script>
 
+<script lang="ts">
+import { Vue } from 'vue-property-decorator';
 
-export default {
-  name:"app"
-}
+export default class App extends Vue {}
 </script>
 
-<style>
-button{
-        border:none;
-        background: blue;
-        color: white;
-        font-size: 20px;
-}
-.router-link-exact-active{
-  padding: 10px;
-  color:white;
-}
- a {
-    text-decoration: none;
+<style lang="scss">
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
 }
 </style>
-
-

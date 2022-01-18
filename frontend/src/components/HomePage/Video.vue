@@ -8,7 +8,9 @@
     </div>
 </template>
 <script>
+import { Message } from '@/models/Message';
 import Store from '../../store';
+//import Message from '../../models/Message'
 const constraints  = {
     video: true,
 }
@@ -124,12 +126,18 @@ export default{
             return false;
         },
         messageBuilder(message){
-            var builtMessage = {
-                    reciever  : this.reciever,
-                    message : message,
-                    messageType : 'CALL'
-            }
-            return builtMessage;
+            return new Message(this.reciever,message,'CALL');
+        },
+        checkCallsRequest(){
+                if(this.$route.params.callRequested) {
+                this.reciever=this.$route.params.callRequested;
+                this.websocketIns.send(this.messageBuilder('callRequested'));
+                } else if(this.$route.params.callAccepted) {
+
+                this.reciever=this.$route.params.callAccepted;
+                this.websocketIns.send(this.messageBuilder('callAccepted'));
+
+                }
         }
     },
     mounted(){
@@ -139,15 +147,7 @@ export default{
         
         //getting the websocket instance from the vuex store
         this.websocketIns = Store.getters.webSocketIns; 
-        if(this.$route.params.callRequested){
-            this.reciever = this.$route.params.callRequested;
-            this.websocketIns.send(this.messageBuilder('callRequested'))
-        }else if(this.$route.params.callAccepted){
-
-            this.reciever = this.$route.params.callAccepted;
-            this.websocketIns.send(this.messageBuilder('callAccepted'))
-
-        }
+        this.checkCallsRequest();
     }
 }
 </script>
@@ -157,3 +157,4 @@ export default{
         color :black;
     }
 </style>
+

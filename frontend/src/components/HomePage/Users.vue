@@ -10,7 +10,7 @@
 </template>
 <script>
 import userAPI from '../../service/userAPI';
-
+//import {Users} from '../../models/Users'
 export default {
     name:'UserView',
     data(){
@@ -26,7 +26,7 @@ export default {
             this.$emit('childToParent', reciever)
         },
         findUsers(){
-            userAPI.instance.get('/getUsername').then((response)=>{
+            userAPI.instance.get('/users').then((response)=>{
                 this.users = response.data;
             });
         },
