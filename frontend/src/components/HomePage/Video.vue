@@ -10,7 +10,8 @@
 <script>
 import { Message } from '@/models/Message';
 import Store from '../../store';
-//import Message from '../../models/Message'
+import { VideoService } from '@/service/VideoService';
+
 const constraints  = {
     video: true,
 }
@@ -65,12 +66,15 @@ export default{
                 this.callID = 1234;
                 this.video = this.$refs.video;
                 this.canvas = this.$refs.clientImage;
+                let videoService = new VideoService(this.canvas,this.video);
                 console.log(this.video);
                 if(this.hasMediaDevices()){
                     navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
                         this.video.srcObject = stream;
                     });
-                    this.paintCanvas(this.canvas,this.video,'CAMERA');   
+
+                    //this.paintCanvas(this.canvas,this.video,'CAMERA'); 
+                    videoService.paintCanvas(this.video,'CAMERA');  
                 }
                 else{
                     alert("no media devices found!!!");
@@ -142,6 +146,7 @@ export default{
     },
     mounted(){
         //getting the reciver from the users component via router
+        //store the reciever name in the Vuex store 
         this.reciever = this.$route.params.callReciever;
 
         

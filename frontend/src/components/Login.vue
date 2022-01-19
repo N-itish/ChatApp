@@ -22,7 +22,8 @@
   </div>
 </template>
 <script>
-import userAPI from "../service/userAPI";
+import { HttpService } from '@/service/HttpService';
+import  { userAPI } from "../service/userAPI";
 import webSocket from "../service/webSocket";
 export default {
   name: "LoginComponent",
@@ -40,22 +41,18 @@ export default {
   methods: {
     SignIn() {
       //Signing in if and only if both email and password are not empty
-
+      let self = this;
       if (this.email.length > 0 && this.password.length > 0) {
-        var self = this;
+        let httpservice = new HttpService();
         this.setTokens(this.email, this.password);
-        userAPI.instance
-          .post("/login", {}).then(() => {
-            //authericating the user once the server responds
-            this.$store.commit("setLogin");
-            this.$router.push("/");
-          }).catch(function (error) {
-            if (!error.response) {
-              self.error = "Network Error, pls try again later";
-            } else {
-              self.error = error.response.status +" please check your username and password!!";
-            }
-          });
+        httpservice.httpPost("/login",{}).then(result =>{
+          self.error = result;
+          //only go to homepage if there are no errors
+          if(this.error.length <= 0){
+            self.$store.commit("setLogin");
+            self.$router.push("/");
+          }
+        });
       } else {
         this.error = "either email or password is empty";
       }
@@ -64,12 +61,13 @@ export default {
       this.$router.push("/register");
     },
     setTokens(email, password) {
+      let api = new userAPI()
       /*  converting the email password combination into base64 
                     encoded string used for basic authentication with server    */
       const authToken = "Basic " + btoa(email + ":" + password);
       /*  storing it in axios so that after login so that other request 
                     to the server will not require user input for email/password combo  */
-      userAPI.setAuthToken(authToken);
+      api.setAuthToken(authToken);
       this.websocketInstance = new webSocket();
 
       /*  storing the username and password in websocket,

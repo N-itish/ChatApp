@@ -9,25 +9,28 @@
     </div>
 </template>
 <script>
-import userAPI from '../../service/userAPI';
-//import {Users} from '../../models/Users'
+
+import {HttpService} from '../../service/HttpService'
 export default {
     name:'UserView',
     data(){
         return{
-            selectedIndex : null,
-            users:[]
+            selectedIndex : -1,
+            users: []
         }
     },
     methods:{
         getUser(reciever,index){
-            this.selectedIndex = index;
+             this.selectedIndex = index;
             //sending selected user from this component to the homepage
             this.$emit('childToParent', reciever)
         },
-        findUsers(){
-            userAPI.instance.get('/users').then((response)=>{
-                this.users = response.data;
+         findUsers(){
+            let httpService = new HttpService();
+            httpService.httpGet('/users').then(result =>{
+                this.users = result.map(function(users){
+                    return users["userName"];
+                });
             });
         },
         callUser(reciever){
@@ -36,7 +39,7 @@ export default {
             this.$router.push({name  : 'video', params:{callRequested: reciever} });
         }
     } 
-}
+};
 </script>
 <style scoped>
  .selected{

@@ -14,6 +14,7 @@
 </template>
 <script>
 import userAPI from '../service/userAPI';
+//import {Users} from '../../models/Users.ts'
 export default {
     name : "RegComp",
     data(){
