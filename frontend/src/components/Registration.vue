@@ -10,15 +10,20 @@
                 <button type="submit">Sign Up</button>
             </form>
         </div>
+        <div *ngIF = "error.length > 0">
+            {{error}}
+        </div>
     </div>
 </template>
 <script>
-import userAPI from '../service/userAPI';
+import { Users } from '@/models/Users';
+import { HttpService } from '@/service/HttpService';
 //import {Users} from '../../models/Users.ts'
 export default {
     name : "RegComp",
     data(){
         return{
+                error:"",
                 username:"",
                 email:"",
                 gender:"",
@@ -28,21 +33,22 @@ export default {
         
     },methods:{
         sendUserDetails(){
+            let self = this;
             //storing all user details into formdata object
-           const formData = new FormData();
-           formData.append("userName",this.username);
-           formData.append("email",this.email);
-           formData.append("gender",this.gender);
-           formData.append("dob",new Date(this.dob));
-           formData.append("password",this.password);
-           formData.append("role","user");
-           userAPI.instance.post('/register',formData).then((response) =>{
+            let user = new Users(0,this.username,this.email,this.password,'User',this.gender,this.dob);
+            let httpService = new HttpService();
+            httpService.httpPost('/users',user).then(error =>{
+                if (this.error.length > 0){
+                    self.error = error;                    
+                }
+            });
+           /*userAPI.instance.post('/register',formData).then((response) =>{
                console.log(response.data);
                //redirect to login if successful registration
                if(response.data){
                    window.location.href = '/'
                }
-           })
+           })*/
         }
     }
 }

@@ -19,7 +19,7 @@ export class HttpService {
         return userList;
     }
 
-    async httpPost(url: string, data: any) {
+    async httpPost(url: string, data: Users) {
         let error : string  = "";
         await userAPI.axiosInstance.post(url, data).then(() => {
             //authericating the user once the server responds
@@ -28,7 +28,7 @@ export class HttpService {
             if (!errorResponse.response) {
                 error = "Network Error, pls try again later";
             } else {
-                error = errorResponse.response.status + " please check your username and password!!";
+                error = errorResponse.response.status 
             }
         });
         return error;

@@ -1,5 +1,6 @@
 export class Users{
-    constructor(private userId:number,
+    constructor(
+    private userId:number,
     private userName: string,
     private email:string,
     private password:string,

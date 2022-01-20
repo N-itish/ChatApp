@@ -46,7 +46,11 @@ export default {
         let httpservice = new HttpService();
         this.setTokens(this.email, this.password);
         httpservice.httpPost("/login",{}).then(result =>{
-          self.error = result;
+            if(result.length > 3) {
+              self.error = result;
+            }else{
+              self.error = result + " please check your username and password!!";
+            }
           //only go to homepage if there are no errors
           if(this.error.length <= 0){
             self.$store.commit("setLogin");
