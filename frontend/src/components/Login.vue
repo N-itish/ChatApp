@@ -41,24 +41,20 @@ export default {
   methods: {
     SignIn() {
       //Signing in if and only if both email and password are not empty
-      let self = this;
       if (this.email.length > 0 && this.password.length > 0) {
         let httpservice = new HttpService();
         this.setTokens(this.email, this.password);
-        httpservice.httpPost("/login",{}).then(result =>{
-            if(result.length > 3) {
-              self.error = result;
-            }else{
-              self.error = result + " please check your username and password!!";
-            }
-          //only go to homepage if there are no errors
-          if(this.error.length <= 0){
-            self.$store.commit("setLogin");
-            self.$router.push("/");
+        httpservice.httpPost("/login",{}).then((result)=>{
+          if(result.length === 0){
+            this.$store.commit("setLogin");
+            this.$router.push("/");
+          }else {
+            this.error = result;
           }
         });
+        console.log(this.error);
       } else {
-        this.error = "either email or password is empty";
+        this.error = "pls check your email or password is empty";
       }
     },
     SignUp() {

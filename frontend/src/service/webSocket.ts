@@ -1,19 +1,25 @@
+import { Message } from "@/models/Message";
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
 import Store from '../store';
 
 
 //Server url taken from the .env file
-const url = process.env.VUE_APP_SERVER_API + "gs-guide-websocket";
-var headers;
+const url:string = process.env.VUE_APP_SERVER_API + "gs-guide-websocket";
+let headers :AuthenticationHeaders;
+
 export default class webSocket{
-    static headers = [];
-    constructor(){
-        this.socket = new SockJS(url);
+    constructor(private socket: any, private stompClient:any){
+       this.Initalize();
+    }
+
+    Initalize(){
+        this.socket= new SockJS(url);
         this.stompClient = Stomp.over(this.socket);
         this.stompClient.debug = function(){};
     }
-    setAuth(username,password){
+
+    setAuth(username:string ,password:string){
        headers = {
            login: username,
            passcode: password
@@ -23,7 +29,7 @@ export default class webSocket{
         this.stompClient.connect(
             headers,  
             () => {
-              this.stompClient.subscribe("/user/topic/greeting", tick => {
+              this.stompClient.subscribe("/user/topic/greeting", (tick:any) => {
                     //console.log(tick);
                     if(tick.body.split(':')[0] == 'callRequest'){
                         Store.commit('setSender',tick.body.split(':')[1])
@@ -33,23 +39,28 @@ export default class webSocket{
                     }
                     else
                     {
-                        //console.log(tick.body);
                         Store.commit('setMessage',tick.body); 
                     }
-                   // console.log(Store.getters.webSockRtrnData); 
               });
             },
-            err => {
+            (err:any) => {
               this.disconnect(err)
             }); 
     }
 
-    send(message){
-        this.stompClient.send("/app/private",JSON.stringify(message),{});
+    send(message:Message){
+        if(this.stompClient != null){
+            this.stompClient.send("/app/private",JSON.stringify(message),{});
+        }
     }
 
-    disconnect(err){
+    disconnect(err:any){
         console.log('disconnected due to error :'+ err);
         this.stompClient = null;
     }
+}
+
+interface AuthenticationHeaders{
+    login: string,
+    passcode: string
 }

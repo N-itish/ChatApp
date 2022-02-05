@@ -23,7 +23,8 @@ export default{
             reciever : "",
             caller:  "",
             callID : null,
-            websocketIns : null
+            websocketIns : null,
+            videoService: null
         }
     },
     computed:{
@@ -51,7 +52,9 @@ export default{
             handler: function (newValues) {
                 console.log(newValues);
                 var canvas = this.$refs.ServerImage;
-                this.paintCanvas(canvas, newValues, "MESSAGE");
+                if(this.videoService !== null){
+                    this.videoService.paintCanvas(canvas, newValues, "SERVER")
+                }   
             },
             immediate: true
             
@@ -63,66 +66,28 @@ export default{
         },
  
         startVideo(){
+
                 this.callID = 1234;
                 this.video = this.$refs.video;
                 this.canvas = this.$refs.clientImage;
-                let videoService = new VideoService(this.canvas,this.video);
+                this.videoService = new VideoService(this.canvas,this.video,'CAMERA');
+
                 console.log(this.video);
                 if(this.hasMediaDevices()){
                     navigator.mediaDevices.getUserMedia(constraints).then((stream)=>{
                         this.video.srcObject = stream;
                     });
-
                     //this.paintCanvas(this.canvas,this.video,'CAMERA'); 
-                    videoService.paintCanvas(this.video,'CAMERA');  
+                    this.videoService.paintCanvas(this.video,'CAMERA');  
                 }
                 else{
                     alert("no media devices found!!!");
                 } 
         },
-        paintCanvas(canvas, source, sourceType) {
-            var ctx = canvas.getContext("2d");
-            ctx.canvas.width = 480;
-            ctx.canvas.height = 640;
-            if(sourceType === 'MESSAGE'){
-                this.paintCanvasFromMessage(ctx,source)
-            }else if(sourceType === 'CAMERA'){
-                this.paintCanvasFromCamera(ctx,canvas,source)
-            }else{
-                alert('Source type is not built');
-            }
-        },
-        paintCanvasFromMessage(ctx,source){
-            var image = new Image();
-            image.onload = function() {
-                ctx.drawImage(image, 69, 50);
-            };
-            image.src = source
-      
-        },
-        paintCanvasFromCamera(ctx,canvas,source){
-            var self = this;
-            var video = source;
-           //refreshing the canvas every 2 secs
-              var intervalId = setInterval(() => {
-                    if(self.callID == null){
-                        clearInterval(intervalId);
-                    } 
-                    ctx.drawImage(video,0,0,640, 480);
-                    this.sendImage(canvas.toDataURL()) ;
-                },2000)
-        },
-        sendImage(imageString){
-            this.websocketIns.send(this.messageBuilder(imageString));
-        },
         leaveCall(){
-            console.log("logging off the call!!")
-            //stopping the canvas refresh
-            this.callID = null;
-            
-            //turing off the camera
-            var mediaStream = this.$refs.video.srcObject;
-            mediaStream.getTracks().forEach(track => track.stop())
+            if(this.videoService !== null){
+                this.videoService.stopCall()
+            }
         },
         callRequest(){
             this.websocketIns.send(this.messageBuilder("callRequested"))    
@@ -130,12 +95,14 @@ export default{
             return false;
         },
         messageBuilder(message){
-            return new Message(this.reciever,message,'CALL');
+            console.log('from video component,messagebuilder func:'+this.reciever);
+            return new Message(message,this.reciever,'CALL');
+
         },
         checkCallsRequest(){
                 if(this.$route.params.callRequested) {
-                this.reciever=this.$route.params.callRequested;
-                this.websocketIns.send(this.messageBuilder('callRequested'));
+                    this.reciever=this.$route.params.callRequested;
+                    this.websocketIns.send(this.messageBuilder('callRequested'));
                 } else if(this.$route.params.callAccepted) {
 
                 this.reciever=this.$route.params.callAccepted;
@@ -146,13 +113,15 @@ export default{
     },
     mounted(){
         //getting the reciver from the users component via router
-        //store the reciever name in the Vuex store 
-        this.reciever = this.$route.params.callReciever;
-
+        this.reciever = this.$route.params.callRequested;
         
+        //storing the reciever in the vuexStore
+        Store.commit('setReciever',this.reciever);
         //getting the websocket instance from the vuex store
         this.websocketIns = Store.getters.webSocketIns; 
         this.checkCallsRequest();
+
+
     }
 }
 </script>

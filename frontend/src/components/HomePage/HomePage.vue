@@ -115,8 +115,6 @@ export default {
         padding-right: 20px;
         padding-bottom: 20px;
         padding-left: 20px;
-        display: inline-block;
-        left:50%;
-        top:50%;
+        float: left;
     }
 </style>

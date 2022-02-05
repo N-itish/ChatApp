@@ -9,28 +9,31 @@ export class HttpService {
 
     async httpGet(url: String) {
         let userList: Users[] = [];
-        try{
+        try {
             await userAPI.axiosInstance.get(url).then((response: any) => {
                 userList = response.data;
             })
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
         return userList;
     }
 
     async httpPost(url: string, data: Users) {
-        let error : string  = "";
-        await userAPI.axiosInstance.post(url, data).then(() => {
-            //authericating the user once the server responds
-            console.log("requesting authentication....");
-        }).catch(function (errorResponse: any) {
+        let error: string = "";
+        try {
+            await userAPI.axiosInstance.post(url, data).then(() => {
+                //authericating the user once the server responds
+                console.log("requesting authentication....");
+            })
+        } catch (errorResponse: any) {
             if (!errorResponse.response) {
                 error = "Network Error, pls try again later";
             } else {
-                error = errorResponse.response.status 
+                error = errorResponse.response.status
             }
-        });
+        }
+        console.log(error);    
         return error;
     }
 

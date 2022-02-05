@@ -10,6 +10,7 @@ const store = new Vuex.Store({
         textMessage     : '',
         specialCommand  : '',
         sender          : '',
+        reciever        : ''
     },
     mutations:{ 
         initWebSocket(state, webSocketIns){
@@ -26,6 +27,9 @@ const store = new Vuex.Store({
         },
         setSender(state,sender){
             state.sender = sender;
+        },
+        setReciever(state,reciever){
+            state.reciever =reciever;
         }
     },
     getters:{
@@ -33,7 +37,8 @@ const store = new Vuex.Store({
         authenticated   : state => state.authenticated,
         textMessage     : state => state.textMessage,
         specialCommand  : state => state.specialCommand,
-        sender          : state => state.sender
+        sender          : state => state.sender,
+        reciever        : state => state.reciever
     }
 });
 
