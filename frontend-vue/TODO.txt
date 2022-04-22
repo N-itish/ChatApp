@@ -1,0 +1,5 @@
+next patch TODO list:
+
+--change asthetics in vue --> move the search bar to the far right of the navbar
+--change logic in vue to accomodate group(senders)
+--change logic in java to accomodate the same especially in call

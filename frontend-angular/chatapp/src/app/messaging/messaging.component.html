@@ -1,0 +1,17 @@
+<div class="position-absolute top-50 start-50 translate-middle mt-4">
+    <div class="chat-area-dimensions">
+         <div *ngFor="let mes of messageList">
+             <div class="message-box">
+                 {{mes.message}}<br>
+                 <div class="message-box-time">
+                     {{mes.dateAdded.getHours()+":"+mes.dateAdded.getMinutes()}}
+                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="input-group">
+        <input type="text" [(ngModel)]="message" class="form-control" placeholder="Message">
+        <button class="btn btn-primary" (click)="sendMessage()">Send</button>
+        <button class="btn btn-danger"  (click)="clearMessages()">Clear</button>
+    </div>
+</div>

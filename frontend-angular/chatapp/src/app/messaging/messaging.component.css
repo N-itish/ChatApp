@@ -1,0 +1,26 @@
+.chat-area-dimensions{
+    height: 600px;
+    width: 700px;
+    overflow-y: auto;
+}
+
+.message-box{
+    margin-top: 10px;
+    margin-left: 20px;
+    border-radius: 15px;
+    font-size: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    width: 350px;
+    color: white;
+    background-color: rgb(59, 59, 152);
+}
+
+.message-box-time{
+    font-size: 12px;
+    padding-left: 80%;
+}
+
+
+

@@ -24,22 +24,20 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 http
                 .cors()
                 .and()
-                .authorizeRequests()
-                .antMatchers("/user/register","/gs-guide-websocket/**").permitAll()
-                .anyRequest()
+                .authorizeRequests().anyRequest()
+                //.antMatchers("/user/register","/gs-guide-websocket/**").permitAll()
                 .authenticated()
                 .and()
-                .httpBasic().and()
-                .csrf()
-                .disable();
+                .oauth2ResourceServer().jwt();
 
+                http.csrf().disable();
     }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

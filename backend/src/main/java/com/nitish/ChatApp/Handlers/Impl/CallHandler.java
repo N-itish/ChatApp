@@ -17,12 +17,19 @@ public class CallHandler implements Handler {
     private final MessageBody messageBody;
     private UserRepository userRepo;
 
+
     @Autowired
     public CallHandler(SimpMessagingTemplate messagingTemplate,UserRepository userRepo, MessageBody messageBody){
             this.messagingTemplate = messagingTemplate;
             this.messageBody = messageBody;
             this.userRepo = userRepo;
     }
+
+    @Override
+    public void returnMessage() {
+        //TODO: add extra logic to handle multiple recievers
+    }
+    /*
     @Override
     public void returnMessage() {
         if(messageBody.getMessage().equalsIgnoreCase("callRequested")) {
@@ -50,5 +57,5 @@ public class CallHandler implements Handler {
              username = principal.toString();
         }
         return username;
-    }
+    }*/
 }

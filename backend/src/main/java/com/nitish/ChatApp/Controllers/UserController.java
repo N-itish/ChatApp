@@ -3,45 +3,33 @@ package com.nitish.ChatApp.Controllers;
 import com.nitish.ChatApp.Entity.Users;
 import com.nitish.ChatApp.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-    private UserService userService;
+    @Value("${okta.rest.api-token}")
+    private String oktaApiToken;
 
-    @Autowired
-    public UserController(UserService userService){
-        this.userService = userService;
-    }
-
+    @Value("${okta.oauth2.issuer}")
+    private String oktaUrl;
 
     @GetMapping("/users")
-    public List<Users> userList(){
-        return userService.getAll();
+    public String getUsers(){
+        String uri = oktaUrl.split("oauth2")[0]+"api/v1/users";
+        //requesting user list from the okta rest api
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization","SSWS "+oktaApiToken);
+        HttpEntity<String> httpEntity = new HttpEntity<>("body",headers);
+        ResponseEntity<String> oktaResponse = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);
+        return oktaResponse.getBody();
     }
 
-    @PutMapping("/users")
-    public void updateUser (@RequestBody Users user){
-        userService.updateUser(user);
-    }
-
-    @PostMapping("/user")
-    public String saveUser(@RequestBody Users user){
-        userService.saveUser(user);
-        return "user registered";
-    }
-
-    @PostMapping("/login")
-    public Boolean loginUser(){
-        return true;
-    }
-
-    @GetMapping("/test")
-    public String hello(){
-        return "Hello";
-    }
 }

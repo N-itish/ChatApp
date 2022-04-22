@@ -9,6 +9,10 @@ import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TextHandler implements Handler {
     private final static String DESTINATION = "topic/greeting";
@@ -27,17 +31,18 @@ public class TextHandler implements Handler {
 
     @Override
     public void returnMessage() {
-        //if the global is sent as reciver then message is sent to everyone connected
-        if (messageBody.getReciever().equalsIgnoreCase("global")) {
+        //getting the list of all logged in users
+        List<String> avilableUser = new ArrayList<>();
+        for(SimpUser user: userReg.getUsers()){
+            avilableUser.add(user.getName());
+        }
 
-            for (SimpUser user : userReg.getUsers()) {
-                System.out.println(user);
-                messagingTemplate.convertAndSendToUser(user.getName(), DESTINATION, messageBody.getMessage());
+        //send message to the logged in users only
+        for(String reciever: messageBody.getReciever()){
+            if(avilableUser.contains(reciever)){
+                messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(reciever),DESTINATION
+                ,messageBody.getMessage());
             }
-        }    else {
-            //convertAndSendToUser automatically adds the "/user/" infront of the destination string
-            System.out.println("Sending message privately");
-            messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(messageBody.getReciever()), DESTINATION, messageBody.getMessage());
         }
     }
 }

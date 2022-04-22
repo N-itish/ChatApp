@@ -9,27 +9,30 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class WebSocketInterceptor implements ChannelInterceptor {
-    private static final String USERNAME_HEADER = "login";
-    private static final String PASSWORD_HEADER = "passcode";
-    private WebSocketAuthenticationService webSocketAuth;
 
     @Autowired
-    public WebSocketInterceptor(WebSocketAuthenticationService webSocketAuth){
-        this.webSocketAuth = webSocketAuth;
-    }
+    private JwtDecoder jwtDecoder;
 
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         StompHeaderAccessor stompHeader =  MessageHeaderAccessor.getAccessor(message,StompHeaderAccessor.class);
-        if(StompCommand.CONNECT == stompHeader.getCommand()){
-            String username = stompHeader.getFirstNativeHeader(USERNAME_HEADER);
-            String passcode = stompHeader.getFirstNativeHeader(PASSWORD_HEADER);
-            UsernamePasswordAuthenticationToken userToken = webSocketAuth.authenticateUser(username,passcode);
-            stompHeader.setUser(userToken);
+        if(StompCommand.CONNECT.equals(stompHeader.getCommand())){
+            List<String> authorization = stompHeader.getNativeHeader("X-Authorization");
+            String accessToken = authorization.get(0).split(" ")[1];
+            Jwt jwt = jwtDecoder.decode(accessToken);
+            JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+            Authentication authentication = converter.convert(jwt);
+            stompHeader.setUser(authentication);
         }
         return message;
     }

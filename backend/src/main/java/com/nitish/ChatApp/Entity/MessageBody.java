@@ -4,12 +4,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageBody {
-    String reciever;
+    String[] reciever;
     String message;
     String messageType;
 
     public MessageBody(){}
-    public MessageBody(String reciever, String message, String messageType){
+    public MessageBody(String[] reciever, String message, String messageType){
         this.reciever = reciever;
         this.message = message;
         this.messageType = messageType;
@@ -26,7 +26,7 @@ public class MessageBody {
     }
 
 
-    public String getReciever() {
+    public String[] getReciever() {
         return reciever;
     }
 
@@ -38,7 +38,7 @@ public class MessageBody {
         this.messageType = messageType;
     }
 
-    public void setReciever(String reciever) {
+    public void setReciever(String[] reciever) {
         this.reciever = reciever;
     }
 
