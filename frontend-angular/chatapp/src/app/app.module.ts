@@ -12,7 +12,8 @@ import { LoginComponent } from './login/login.component';
 import myOktaConfig from '../config'
 import { Router } from '@angular/router';
 import { SearchComponent } from './homepage/search/search.component';
-import {HttpClientModule} from '@angular/common/http'
+import {HttpClientModule} from '@angular/common/http';
+import { UsersListComponent } from './homepage/users-list/users-list.component'
 
 const oktaAuth = new OktaAuth({
   issuer:   myOktaConfig.oidc.issuer,
@@ -27,7 +28,8 @@ const oktaAuth = new OktaAuth({
     VideoChatComponent,
     HomepageComponent,
     LoginComponent,
-    SearchComponent   
+    SearchComponent,
+    UsersListComponent   
   ],
   imports: [
     BrowserModule,

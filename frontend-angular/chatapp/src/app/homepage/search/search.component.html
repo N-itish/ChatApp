@@ -1,12 +1,6 @@
 <div class="dropdown">
     <form class="d-flex">
-        <input (input)="filterUsers($event)" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-danger me-3" type="submit">clear</button>
+        <input  (input)="findUser($event)" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
     </form>
-    <div *ngIf="filteredUsers.length > 0">
-        <div *ngFor="let user of filteredUsers">
-            <p>{{user}}</p>
-        </div>
-    </div>
 </div>
 

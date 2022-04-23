@@ -1,0 +1,12 @@
+.list-group-item{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 160px;
+}
+
+.user-dimensions{
+    width: 200px;
+    padding: 10px;
+    margin-bottom: 20px;
+    font-size: smaller;    
+}
