@@ -3,7 +3,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { UserService } from 'src/app/services/user.service';
-import { Users } from '../../common/users.model';
+import { Users } from '../../shared/users.model';
 
 @Component({
   selector: 'app-search',
@@ -18,8 +18,6 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-    
 
     findUser(inputEvent: Event){
       let userSearched:string = (<HTMLInputElement>inputEvent.target).value;

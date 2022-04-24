@@ -24,8 +24,8 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
                 http
                 .cors()
                 .and()
-                .authorizeRequests().anyRequest()
-                //.antMatchers("/user/register","/gs-guide-websocket/**").permitAll()
+                .authorizeRequests()
+                .antMatchers("/chatApp-webSocket-endpoint/**").permitAll().anyRequest()
                 .authenticated()
                 .and()
                 .oauth2ResourceServer().jwt();

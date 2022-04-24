@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { WebSocketService } from '../services/websocket.service';
+import { Message } from '../shared/message.model';
 import { MessageBox } from './message-box.model';
 
 @Component({
@@ -9,16 +11,20 @@ import { MessageBox } from './message-box.model';
 export class MessagingComponent implements OnInit {
   message:string ='';
   messageList: MessageBox[] = []
-  constructor() { }
-
+  constructor(private webSocketService: WebSocketService) { }
   ngOnInit(): void {
+    this.webSocketService.connect();
   }
 
   sendMessage()
   {
-    this.messageList.push(
-      new MessageBox(this.message,new Date())
-    )
+    if(this.webSocketService.stompClient === null){
+      this.webSocketService.connect();
+    }
+    //this.webSocketService.send(new Message(["snoopy@luv2code.com"],this.message,"TEXT"));
+    // this.messageList.push(
+    //   new MessageBox(this.message,new Date())
+    // )
   }
 
   clearMessages(){

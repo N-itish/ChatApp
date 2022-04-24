@@ -1,12 +1,13 @@
-import * as Stomp from 'stompjs';
-import * as SockJS from 'sockjs-client';
+import {Stomp} from '@stomp/stompjs';
+import sockjs from 'sockjs-client/dist/sockjs';
 import { Inject, Injectable } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
-import { oktaAuthFactory } from '@okta/okta-angular/src/okta/okta.module';
+import { Message } from '../shared/message.model';
+
 @Injectable()
 export class WebSocketService{
-    endPoint: string = 'http://localhost:9001/gs-guide-websocket'
+    endPoint: string = 'http://localhost:9001/chatApp-webSocket-endpoint'
     topic:string  = '/user/topic/greetings'
     stompClient: any;
 
@@ -16,7 +17,7 @@ export class WebSocketService{
 
     connect(){
         const accessToken = this.oktaAuth.getAccessToken();
-        let webSocket = new SockJS(this.endPoint);
+        let webSocket = new sockjs(this.endPoint);
         let self = this;
         this.stompClient = Stomp.over(webSocket);
         
@@ -26,6 +27,7 @@ export class WebSocketService{
                 self.onMessageRecieved(event);
             })
         })
+        console.log(this.stompClient);
     }
 
     disconnect(){
@@ -34,7 +36,7 @@ export class WebSocketService{
         }
     }
 
-    send(message:string){
+    send(message:Message){
         this.stompClient.send("/app/private",{},JSON.stringify(message))
     }
 

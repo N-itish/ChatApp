@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
-import { Users } from 'src/app/common/users.model';
+import { Users } from 'src/app/shared/users.model';
 import { UserService } from 'src/app/services/user.service';
 const url="http://localhost:9001/api/users";
 
