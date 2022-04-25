@@ -32,6 +32,7 @@ public class WebSocketInterceptor implements ChannelInterceptor {
             Jwt jwt = jwtDecoder.decode(accessToken);
             JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
             Authentication authentication = converter.convert(jwt);
+            System.out.println(authentication);
             stompHeader.setUser(authentication);
         }
         return message;

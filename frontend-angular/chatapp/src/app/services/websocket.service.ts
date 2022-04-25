@@ -4,14 +4,15 @@ import { Inject, Injectable } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { Message } from '../shared/message.model';
+import { MessageStore } from './message-store.service';
 
 @Injectable()
 export class WebSocketService{
     endPoint: string = 'http://localhost:9001/chatApp-webSocket-endpoint'
-    topic:string  = '/user/topic/greetings'
+    topic:string  = '/user/topic/greeting'
     stompClient: any;
 
-    constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth){
+    constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,private messageStore: MessageStore){
 
     }
 
@@ -24,8 +25,11 @@ export class WebSocketService{
         this.stompClient.connect({"X-Authorization":"Bearer "+accessToken}, function(frame:any){
             console.log(frame);
             self.stompClient.subscribe(self.topic,function(event:any){
-                self.onMessageRecieved(event);
+                self.onMessageRecieved(event.body);
             })
+        },function(error:any){
+            console.log('This is from the connect method');
+            console.log(error);
         })
         console.log(this.stompClient);
     }
@@ -40,7 +44,7 @@ export class WebSocketService{
         this.stompClient.send("/app/private",{},JSON.stringify(message))
     }
 
-    onMessageRecieved(message:any){
-        console.log(message);
+    onMessageRecieved(message:string){
+        this.messageStore.recievedMessage.emit(message);
     }
 }

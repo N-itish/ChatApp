@@ -3,6 +3,6 @@ import { Observable } from "rxjs";
 
 @Injectable()
 export class UserService{
-    updateSearchedUser = new EventEmitter<string>(); 
+    updateSearchedUser:EventEmitter<string> = new EventEmitter<string>(); 
     constructor(){}
 }

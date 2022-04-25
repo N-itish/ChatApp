@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TextHandler implements Handler {
@@ -31,18 +30,10 @@ public class TextHandler implements Handler {
 
     @Override
     public void returnMessage() {
-        //getting the list of all logged in users
-        List<String> avilableUser = new ArrayList<>();
-        for(SimpUser user: userReg.getUsers()){
-            avilableUser.add(user.getName());
-        }
-
-        //send message to the logged in users only
-        for(String reciever: messageBody.getReciever()){
-            if(avilableUser.contains(reciever)){
-                messagingTemplate.convertAndSendToUser(userRepo.findEmailByUserName(reciever),DESTINATION
+        for(String receiver: messageBody.getRecievers()){
+                messagingTemplate.convertAndSendToUser(receiver,DESTINATION
                 ,messageBody.getMessage());
-            }
         }
     }
 }
+

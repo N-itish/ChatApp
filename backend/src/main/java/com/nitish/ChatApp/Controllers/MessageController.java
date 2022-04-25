@@ -10,6 +10,8 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MessageController {
@@ -32,7 +34,8 @@ public class MessageController {
      *  If no receivers name given then send message to all users in SimpUser
      */
    @MessageMapping("/private")
-   public void privatelySendMessage(MessageBody messageBody) {
+   public void privatelySendMessage(@RequestBody MessageBody messageBody) {
+       System.out.println(messageBody);
        if(messageBody.getMessageType().equals("TEXT")){
             messageHandler = new TextHandler(messagingTemplate,userReg,userRepo,messageBody);
             messageHandler.returnMessage();

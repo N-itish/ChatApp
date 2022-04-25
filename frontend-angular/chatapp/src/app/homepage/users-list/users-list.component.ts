@@ -34,6 +34,7 @@ export class UsersListComponent implements OnInit {
     //getting the searchedUser from the Search component
     this.userService.updateSearchedUser.subscribe(
       (result:string)=>{
+        //console.log(this.searchedUser);
         this.searchedUser = result;
         this.filterUserList(result);
       }

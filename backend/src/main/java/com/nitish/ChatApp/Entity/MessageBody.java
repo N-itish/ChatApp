@@ -4,13 +4,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageBody {
-    String[] reciever;
+    String[] recievers;
     String message;
     String messageType;
 
     public MessageBody(){}
-    public MessageBody(String[] reciever, String message, String messageType){
-        this.reciever = reciever;
+    public MessageBody(String[] recievers, String message, String messageType){
+        this.recievers = recievers;
         this.message = message;
         this.messageType = messageType;
 
@@ -19,15 +19,15 @@ public class MessageBody {
     @Override
     public String toString() {
         return "PrivateMessage{" +
-                ", reciever='" + reciever + '\'' +
+                ", reciever='" + recievers + '\'' +
                 ", message='" + message + '\'' +
                 ", messageType='" + messageType + '\'' +
                 '}';
     }
 
 
-    public String[] getReciever() {
-        return reciever;
+    public String[] getRecievers() {
+        return recievers;
     }
 
     public String getMessageType() {
@@ -38,8 +38,8 @@ public class MessageBody {
         this.messageType = messageType;
     }
 
-    public void setReciever(String[] reciever) {
-        this.reciever = reciever;
+    public void setRecievers(String[] recievers) {
+        this.recievers = recievers;
     }
 
     public String getMessage() {
