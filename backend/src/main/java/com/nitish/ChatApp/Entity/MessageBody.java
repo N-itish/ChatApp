@@ -7,24 +7,23 @@ public class MessageBody {
     String[] recievers;
     String message;
     String messageType;
+    String groupId;
 
     public MessageBody(){}
-    public MessageBody(String[] recievers, String message, String messageType){
+    public MessageBody(String[] recievers, String message, String messageType,String groupId){
         this.recievers = recievers;
         this.message = message;
         this.messageType = messageType;
-
+        this.groupId = groupId;
     }
 
-    @Override
-    public String toString() {
-        return "PrivateMessage{" +
-                ", reciever='" + recievers + '\'' +
-                ", message='" + message + '\'' +
-                ", messageType='" + messageType + '\'' +
-                '}';
+    public String getGroupId() {
+        return groupId;
     }
 
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
     public String[] getRecievers() {
         return recievers;

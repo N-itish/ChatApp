@@ -8,18 +8,13 @@ import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class MessageController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
-
-    @Autowired
-    private SimpUserRegistry userReg;
 
     @Autowired
     private UserRepository userRepo;
@@ -37,11 +32,11 @@ public class MessageController {
    public void privatelySendMessage(@RequestBody MessageBody messageBody) {
        System.out.println(messageBody);
        if(messageBody.getMessageType().equals("TEXT")){
-            messageHandler = new TextHandler(messagingTemplate,userReg,userRepo,messageBody);
-            messageHandler.returnMessage();
+            messageHandler = new TextHandler(messagingTemplate,messageBody);
+            messageHandler.deliverMessage();
        }else if(messageBody.getMessageType().equals("CALL")){
             messageHandler = new CallHandler(messagingTemplate,userRepo,messageBody);
-            messageHandler.returnMessage();
+            messageHandler.deliverMessage();
        }
 
    }

@@ -45,6 +45,6 @@ export class WebSocketService{
     }
 
     onMessageRecieved(message:string){
-        this.messageStore.recievedMessage.emit(message);
+        this.messageStore.parseMessage(message);
     }
 }

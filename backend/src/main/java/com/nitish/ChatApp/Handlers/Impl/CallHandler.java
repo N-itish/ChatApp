@@ -26,7 +26,7 @@ public class CallHandler implements Handler {
     }
 
     @Override
-    public void returnMessage() {
+    public void deliverMessage() {
         //TODO: add extra logic to handle multiple recievers
     }
     /*
