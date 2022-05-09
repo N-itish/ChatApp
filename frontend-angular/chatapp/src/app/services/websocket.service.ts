@@ -18,22 +18,31 @@ export class WebSocketService{
 
     connect(){
         const accessToken = this.oktaAuth.getAccessToken();
-        let webSocket = new sockjs(this.endPoint);
         let self = this;
-        this.stompClient = Stomp.over(webSocket);
+        this.stompClient = Stomp.over(()=>{return new sockjs(this.endPoint)});
+        this.stompClient.reconnect_delay = 1000;
         
-        this.stompClient.connect({"X-Authorization":"Bearer "+accessToken}, function(frame:any){
+        this.stompClient.connect({"X-Authorization":"Bearer "+accessToken}, 
+        (frame:any)=>{
             console.log(frame);
-            self.stompClient.subscribe(self.topic,function(event:any){
-                self.onMessageRecieved(event.body);
-            })
-        },function(error:any){
-            console.log('This is from the connect method');
-            console.log(error);
+            self.connectionCallback();
+        },(error:any)=>{
+            self.errorCallback(error);
         })
         console.log(this.stompClient);
     }
 
+    errorCallback(error:any){
+        console.log('From error callback')
+        console.log(error)
+    }
+
+    connectionCallback(){
+       var self = this;
+        this.stompClient.subscribe(this.topic,function(event:any){
+            self.onMessageRecieved(event.body);
+        })
+    }
     disconnect(){
         if(this.stompClient !== null){
             this.stompClient.disconnect();

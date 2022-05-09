@@ -3,16 +3,14 @@ package com.nitish.ChatApp.Controllers;
 import com.nitish.ChatApp.Entity.Users;
 import com.nitish.ChatApp.Handlers.Impl.TextHandler;
 import com.nitish.ChatApp.Service.UserService;
+import com.nitish.ChatApp.models.UserGroups;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api")
@@ -37,9 +35,9 @@ public class UserController {
     }
 
 
-//    @GetMapping("/groups")
-//    public HashMap<UUID,List<String>> getGroups(){
-//        return TextHandler.userGroup;
-//    }
+    @GetMapping("/groups")
+    public Collection<List<String>> getGroups(){
+        return new UserGroups().getAll();
+    }
 
 }

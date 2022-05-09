@@ -29,25 +29,16 @@ export class MessagingComponent implements OnInit {
     )
 
     this.groupStore.groupId.subscribe(
-      (groupId:string)=>{
+      groupId=>{
         this.groupId = groupId;
       }
     )
   }
 
   sendMessage()
-  {
-    
-    //TODO: try to create websocket session if session is not created before sending data
-    //console.log(this.webSocketService)
+  {  
     console.log(this.groupId);
-    console.log(this.recieverStore.getRecievers);
-
-    this.webSocketService.send(new Message(this.recieverStore.getRecievers,this.message,"TEXT",this.groupId))
-    // if(this.recieverStore.getRecievers.length > 0){
-    //   this.webSocketService.send(new Message(this.recieverStore.getRecievers,this.message,"TEXT"))
-    // }
-    
+    this.webSocketService.send(new Message(this.recieverStore.getRecievers,this.message,"TEXT",this.groupId));  
   }
 
   clearMessages(){

@@ -1,17 +1,17 @@
-package com.nitish.ChatApp.Entity;
+package com.nitish.ChatApp.models;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class MessageBody {
-    String[] recievers;
+    String[] receivers;
     String message;
     String messageType;
     String groupId;
 
     public MessageBody(){}
-    public MessageBody(String[] recievers, String message, String messageType,String groupId){
-        this.recievers = recievers;
+    public MessageBody(String[] receivers, String message, String messageType,String groupId){
+        this.receivers = receivers;
         this.message = message;
         this.messageType = messageType;
         this.groupId = groupId;
@@ -26,7 +26,7 @@ public class MessageBody {
     }
 
     public String[] getRecievers() {
-        return recievers;
+        return receivers;
     }
 
     public String getMessageType() {
@@ -38,7 +38,7 @@ public class MessageBody {
     }
 
     public void setRecievers(String[] recievers) {
-        this.recievers = recievers;
+        this.receivers = recievers;
     }
 
     public String getMessage() {

@@ -1,12 +1,10 @@
 package com.nitish.ChatApp.Handlers.Impl;
 
-import com.nitish.ChatApp.Entity.MessageBody;
+import com.nitish.ChatApp.models.MessageBody;
 import com.nitish.ChatApp.Handlers.Handler;
 import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 

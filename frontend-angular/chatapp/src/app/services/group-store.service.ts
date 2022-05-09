@@ -1,5 +1,5 @@
-import { EventEmitter } from "@angular/core";
+import { Subject } from "rxjs";
 
 export class GroupStore{
-    public groupId:EventEmitter<string|null> = new EventEmitter<string|null>();
+    public groupId = new Subject<string|null>();
 }

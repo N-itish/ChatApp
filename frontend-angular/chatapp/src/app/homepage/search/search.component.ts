@@ -21,7 +21,7 @@ export class SearchComponent implements OnInit {
 
     findUser(inputEvent: Event){
       let userSearched:string = (<HTMLInputElement>inputEvent.target).value;
-      this.userService.updateSearchedUser.emit(userSearched);
+      this.userService.updateSearchedUser.next(userSearched);
     }
 
   // filterUsers(searchedString: Event){

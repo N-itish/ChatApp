@@ -1,6 +1,6 @@
 package com.nitish.ChatApp.Controllers;
 
-import com.nitish.ChatApp.Entity.MessageBody;
+import com.nitish.ChatApp.models.MessageBody;
 import com.nitish.ChatApp.Handlers.Handler;
 import com.nitish.ChatApp.Handlers.Impl.CallHandler;
 import com.nitish.ChatApp.Handlers.Impl.TextHandler;
