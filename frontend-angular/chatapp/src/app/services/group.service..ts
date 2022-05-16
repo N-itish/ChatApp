@@ -3,8 +3,8 @@ import { OKTA_AUTH } from "@okta/okta-angular";
 import { OktaAuth } from "@okta/okta-auth-js";
 import { Observable, Subject } from "rxjs";
 import { Group } from "../shared/group.model";
-import { HttpService } from "./http.service";
 import { CustomHeaders } from "../shared/headers.model";
+import { HttpService } from "./http.service";
 import { RecieversStore } from "./recievers-store.service";
 
 const url = 'http://localhost:9001/api/groups';
@@ -33,9 +33,11 @@ export class GroupService {
     }
 
     //setting the current groupId 
-    setSelectedGroupId(group:Group) {
-        this.currentGroupId = group.groupId as string;
-        console.log('From the groupService, groupId:'+this.currentGroupId);
+    public setSelectedGroupId(group:Group) {
+        if(group.groupId){
+             this.currentGroupId = group.groupId as string;
+        }
+         //console.log('From the groupService, groupId:'+this.currentGroupId);
     }
 
     private addGroupToArray(recievers: string[],groupName:string) {
