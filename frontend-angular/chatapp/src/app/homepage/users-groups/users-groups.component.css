@@ -1,0 +1,12 @@
+.list-group-item,.group-header{
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 200px;
+}
+.list-group-item:hover{
+    color: white;
+    background-color: black;
+}
+.group-header{
+    color:white;
+}

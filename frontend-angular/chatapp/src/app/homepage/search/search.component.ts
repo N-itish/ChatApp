@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
-import { OKTA_AUTH } from '@okta/okta-angular';
-import { OktaAuth } from '@okta/okta-auth-js';
 import { UserService } from 'src/app/services/user-store.service';
 import { Users } from '../../shared/users.model';
 
@@ -14,7 +12,7 @@ export class SearchComponent implements OnInit {
 
   oktaUsers:Users[] = [];
   filteredUsers:string[]=[];
-  constructor(private userService:UserService,@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,private httpClient:HttpClient) { }
+  constructor(private userService:UserService,private httpClient:HttpClient) { }
 
   ngOnInit(): void {
   }

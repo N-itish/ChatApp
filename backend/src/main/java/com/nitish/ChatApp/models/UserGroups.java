@@ -26,9 +26,17 @@ public class UserGroups {
         return groups.get(uniqueGroupId);
     }
 
-    public Collection<List<String>> getAll(){
-        return groups.values();
+    public String getGroupId(String[] group){
+        UUID uniqueGroupId = UUID.randomUUID();
+        System.out.println(uniqueGroupId);
+        if(!groups.containsKey(uniqueGroupId)){
+            groups.put(uniqueGroupId,Arrays.asList(group));
+        }else{
+            uniqueGroupId = new UUID(0,0);
+        }
+        return uniqueGroupId.toString();
     }
+
 
     /*
         TODO: need to create entity class and repository to store groups

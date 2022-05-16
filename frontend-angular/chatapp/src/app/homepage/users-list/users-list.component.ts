@@ -5,7 +5,7 @@ import { OktaAuth } from '@okta/okta-auth-js';
 import { Users } from 'src/app/shared/users.model';
 import { UserService } from 'src/app/services/user-store.service';
 import { RecieversStore } from 'src/app/services/recievers-store.service';
-const url="http://localhost:9001/api/users";
+import { HttpService } from 'src/app/services/http.service';
 
 @Component({
   selector: 'app-users-list',
@@ -16,9 +16,10 @@ export class UsersListComponent implements OnInit {
   users:Users[]= []
   selectedUsers: Users[]=[];
   searchedUser:string ='';
+  selected:string = "";
   constructor(
     private userService:UserService,
-    private httpClient: HttpClient,
+    private httpService: HttpService,
     private recieverStore: RecieversStore,
     @Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
     ) { }
@@ -28,11 +29,7 @@ export class UsersListComponent implements OnInit {
         //backend in turn requests okta for the userlist
         //okta userlist API cannot be directly accessed from the frontend
         const accessToken = this.oktaAuth.getAccessToken();
-        this.httpClient.get(url,{
-          headers:{
-            "Authorization":"Bearer "+accessToken
-          }
-        }).subscribe((response:any)=>{
+        this.httpService.httpGet("users").subscribe((response:any)=>{
           this.parseResponse(response);
         })
 
@@ -65,11 +62,17 @@ export class UsersListComponent implements OnInit {
 
   selectUser(user:Users){
     this.recieverStore.addReciever(user.email);
-
+    //toggle -- if new user insert else remove
     if(this.selectedUsers.indexOf(user) === -1){
       this.selectedUsers.push(user);
       console.log(this.selectedUsers);
+    }else{
+      this.removeReciever(user);
     }
   }
 
+  //checking if the user exists in the recieversStore
+  containsUser(user:Users):boolean{
+    return this.recieverStore.getRecievers.includes(user.email);
+  }
 }

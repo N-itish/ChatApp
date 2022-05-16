@@ -5,6 +5,8 @@ import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { Message } from '../shared/message.model';
 import { MessageStore } from './message-store.service';
+import { GroupService } from './group.service.';
+import { Group } from '../shared/group.model';
 
 @Injectable()
 export class WebSocketService{
@@ -12,7 +14,9 @@ export class WebSocketService{
     topic:string  = '/user/topic/greeting'
     stompClient: any;
 
-    constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,private messageStore: MessageStore){
+    constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
+    private messageStore: MessageStore
+    ,private groupService:GroupService){
 
     }
 
@@ -40,7 +44,7 @@ export class WebSocketService{
     connectionCallback(){
        var self = this;
         this.stompClient.subscribe(this.topic,function(event:any){
-            self.onMessageRecieved(event.body);
+            self.parseMessage(event.body);
         })
     }
     disconnect(){
@@ -53,7 +57,12 @@ export class WebSocketService{
         this.stompClient.send("/app/private",{},JSON.stringify(message))
     }
 
-    onMessageRecieved(message:string){
-        this.messageStore.parseMessage(message);
+    parseMessage(message:string){
+        if(message.split(":")[0]=="GRP-ID"){
+            let groupId: string = message.split(":")[1]    
+            //this.groupService.addGroupWithId(new Group(['test'],'my test group',groupId)) ; 
+        }else{
+            this.messageStore.recievedMessage.next(message);
+        }
     }
 }

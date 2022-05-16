@@ -1,4 +1,4 @@
-<div id="NavBar">
+<div>
     <!-- Header  -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark ps-3">
       <a class="navbar-brand ps5">Chat App</a>
@@ -11,8 +11,18 @@
       <app-search></app-search>
     </nav>
     <!-- Child components are placed here -->
-    <router-outlet></router-outlet>
-    <div class="float-right">
-      <app-users-list></app-users-list>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <app-users-groups></app-users-groups>
+        </div>
+        <div class="col">
+          <router-outlet></router-outlet>
+        </div>
+        <div class="col">
+          <app-users-list></app-users-list>
+        </div>
+      </div>
     </div>
+  
 </div>

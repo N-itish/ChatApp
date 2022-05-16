@@ -35,9 +35,12 @@ public class UserController {
     }
 
 
-    @GetMapping("/groups")
-    public Collection<List<String>> getGroups(){
-        return new UserGroups().getAll();
+    @PostMapping("/groups")
+    public String getGroupId(@RequestBody String[] groups){
+        UserGroups userGroups = new UserGroups();
+        String groupId = userGroups.getGroupId(groups);
+        System.out.println(groupId);
+        return groupId;
     }
 
 }

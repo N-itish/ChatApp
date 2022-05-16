@@ -12,8 +12,12 @@ import { LoginComponent } from './login/login.component';
 import myOktaConfig from '../config'
 import { Router } from '@angular/router';
 import { SearchComponent } from './homepage/search/search.component';
-import {HttpClientModule} from '@angular/common/http';
-import { UsersListComponent } from './homepage/users-list/users-list.component'
+import {HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS} from '@angular/common/http';
+import { UsersListComponent } from './homepage/users-list/users-list.component';
+import { UsersGroupsComponent } from './homepage/users-groups/users-groups.component'
+import { GroupService } from './services/group.service.';
+import { HttpService } from './services/http.service';
+import { HttpAuthenticationInterceptor } from './http.interceptor';
 
 const oktaAuth = new OktaAuth({
   issuer:   myOktaConfig.oidc.issuer,
@@ -29,7 +33,8 @@ const oktaAuth = new OktaAuth({
     HomepageComponent,
     LoginComponent,
     SearchComponent,
-    UsersListComponent   
+    UsersListComponent,
+    UsersGroupsComponent   
   ],
   imports: [
     BrowserModule,
@@ -50,8 +55,8 @@ const oktaAuth = new OktaAuth({
             router.navigate(['/login']);
           }
         }
-      }
-    }
+      },
+    },{provide:HTTP_INTERCEPTORS,useClass:HttpAuthenticationInterceptor,multi:true},HttpService
   ],
   bootstrap: [AppComponent]
 })
