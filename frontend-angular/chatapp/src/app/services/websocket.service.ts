@@ -53,16 +53,16 @@ export class WebSocketService{
         }
     }
 
-    send(message:Message){
+    send(message:Group){
+        console.log(message);
         this.stompClient.send("/app/private",{},JSON.stringify(message))
     }
 
-    parseMessage(message:string){
-        if(message.split(":")[0]=="GRP-ID"){
-            let groupId: string = message.split(":")[1]    
-            //this.groupService.addGroupWithId(new Group(['test'],'my test group',groupId)) ; 
-        }else{
-            this.messageStore.recievedMessage.next(message);
-        }
+    parseMessage(serverMessage:any){
+        console.log(serverMessage)
+        let returnedGroup:Group = JSON.parse(serverMessage);
+        this.groupService.addGroupDirectly(returnedGroup)
+        this.groupService.setSelectedGroup(returnedGroup)
+        this.messageStore.recievedMessage.next(returnedGroup.message);
     }
 }

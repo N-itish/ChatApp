@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { GroupService } from 'src/app/services/group.service.';
 import { RecieversStore } from 'src/app/services/recievers-store.service';
+import { Group } from 'src/app/shared/group.model';
+import { Message } from 'src/app/shared/message.model';
 import { MessageStore } from '../../services/message-store.service';
 import { WebSocketService } from '../../services/websocket.service';
 import { MessageBox } from './message-box.model';
@@ -32,12 +34,17 @@ export class MessagingComponent implements OnInit {
 
   sendMessage()
   { 
-    if(this.recieverStore.getRecievers.length > 2){
-      alert('please create a group first');
-    }else{ 
-       this.groupService.addGroup('');
+    let messageGroup:Group|undefined;
+    if(this.recieverStore.getRecievers.length > 2 && !this.groupService.currentGroup){   
+        alert('please create a group first');
+    } 
+    //gaurd so that if no other reciever is selected except self new group is not created
+    else if(this.recieverStore.getRecievers.length > 1){
+        this.groupService.addGroupUsingName('');
     }
-    // this.webSocketService.send(new Message(this.recieverStore.getRecievers,this.message,"TEXT",null));  
+    messageGroup = this.groupService.currentGroup as Group;
+    messageGroup.message = this.message;
+    this.webSocketService.send(messageGroup as Group);
   }
 
   clearMessages(){

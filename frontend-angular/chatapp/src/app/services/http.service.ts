@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
+import { Group } from "../shared/group.model";
 import {CustomHeaders} from "../shared/headers.model";
 const baseUrl:string = 'http://localhost:9001/api/';
 @Injectable()
@@ -12,7 +13,7 @@ export class HttpService{
         return this.httpClient.get(url);
     }
 
-    public httpPost(endpoint:string,data: any,customHeaders:CustomHeaders[],
+    public httpPost(endpoint:string,data: Group,customHeaders:CustomHeaders[],
         customResponseType?:any){
         const url = baseUrl+endpoint;
         if(customResponseType){

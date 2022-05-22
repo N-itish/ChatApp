@@ -7,25 +7,44 @@ import { CustomHeaders } from "../shared/headers.model";
 import { HttpService } from "./http.service";
 import { RecieversStore } from "./recievers-store.service";
 
-const url = 'http://localhost:9001/api/groups';
 @Injectable()
 export class GroupService {
    
     private _userGroups: Group[] = [];
-    private currentGroupId:string ='';
+    private _currentGroup: Group | undefined;
+    
     constructor(
             private httpService: HttpService,
             private recieverStore:RecieversStore,
             @Inject(OKTA_AUTH) private oktaAuth: OktaAuth) {
     }
 
-    public get userGroups(){
+    public  get userGroups(){
         return this._userGroups;
     }
 
-    public addGroup(groupName:string){
-       const group:string[] = this.recieverStore.getRecievers;
-       this.addGroupToArray(group,groupName); 
+    public get currentGroup(){
+        return this._currentGroup;
+    }
+
+    public addGroupDirectly(group:Group){
+        this.addGroupToArray(group);
+    }
+    
+    public addGroupUsingName(groupName:string){
+        let group:Group;
+       const recievers:string[] = this.recieverStore.getRecievers;
+       if(!groupName){
+           group = new Group(recievers,recievers.toString(),null,'');
+       } else{
+           group = new Group(recievers,groupName,null,'');
+       }
+       console.log(recievers);
+       //setting the newly created group as the selected group
+       this.setSelectedGroup(group);
+
+       //storing the group 
+       this.addGroupToArray(group); 
     }
 
     public addGroupWithId(group: Group) {
@@ -33,52 +52,53 @@ export class GroupService {
     }
 
     //setting the current groupId 
-    public setSelectedGroupId(group:Group) {
-        if(group.groupId){
-             this.currentGroupId = group.groupId as string;
-        }
+    public setSelectedGroup(group:Group) {
+             this._currentGroup = group;
          //console.log('From the groupService, groupId:'+this.currentGroupId);
     }
 
-    private addGroupToArray(recievers: string[],groupName:string) {
-        //group represents the group of recievers
-        let newGroup:Group;
-        if(!groupName){
-            newGroup = new Group(recievers, recievers.toString(), null);
-        }else{
-            newGroup = new Group(recievers,groupName,null);
-        }
+    private addGroupToArray(group: Group) {
+
+        if(this._userGroups.length === 0){
+            this._userGroups.push(group)   
+        }         
         
-        //checking if group with same email exists in the array
-        if (this.getExistingGroup(recievers) === null) {
-            /*
-                getting the group id -- group of users is sent as parameter to backend
-                it is stored in the backend and used to recognize group with the particular id
-            */
-            this.getGroupId(newGroup.recievers).subscribe((groupId:any)=>{
-                newGroup.groupId = groupId;
-                this.userGroups.push(newGroup);
-            });
+        else{
+        //checking if group with same email exists in the array    
+        if (this.getExistingGroup(group.recievers) === null) {
+                /*
+                    getting the group id -- group of users is sent as parameter to backend
+                    it is stored in the backend and used to recognize group with the particular id
+                */
+                this.getGroupId(group).subscribe(
+                    (group:any)=>{
+                        console.log(group);
+                        this._userGroups.push(group);
+                    }
+                );
+            }
         }
     }
 
     private getExistingGroup(recievers:string[]):Group|null{
         let group:Group|null = null;
-        for (let i = 0; i < this.userGroups.length; i++) {
-            if (this.userGroups[i].recievers.length === recievers.length &&
-                this.userGroups[i].recievers.every((value, index) => value === recievers[index])) {
-                group = this.userGroups[i];
-                break;
+        if(!(this.userGroups.length==0)){
+            for (let i = 0; i < this.userGroups.length; i++) {
+                if (this.userGroups[i].recievers.length === recievers.length &&
+                    this.userGroups[i].recievers.every((value, index) => value === recievers[index])) {
+                    group = this.userGroups[i];
+                    break;
+                }
             }
         }
         return group;
     }
 
-    private getGroupId(data: string[]) : Observable<Object>{
+    private getGroupId(data: Group) : Observable<Object>{
         const customHeaders: CustomHeaders = {
             key:"Content-type",
             value:"application/json"
         }
-        return this.httpService.httpPost("groups",JSON.stringify(data),[customHeaders],'text');
+        return this.httpService.httpPost("groups",data,[customHeaders],'text');
     }
 }

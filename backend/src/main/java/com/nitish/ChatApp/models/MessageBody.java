@@ -4,41 +4,23 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MessageBody {
-    String[] receivers;
-    String message;
-    String messageType;
-    String groupId;
+    private String message;
+    private String messageType;
+    private Group group;
 
     public MessageBody(){}
-    public MessageBody(String[] receivers, String message, String messageType,String groupId){
-        this.receivers = receivers;
+
+
+    public MessageBody(String message, String messageType, Group group){
         this.message = message;
         this.messageType = messageType;
-        this.groupId = groupId;
+        this.group = group;
     }
 
-    public String getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
-
-    public String[] getRecievers() {
-        return receivers;
-    }
+    public Group getGroup() {return group;}
 
     public String getMessageType() {
         return messageType;
-    }
-
-    public void setMessageType(String messageType) {
-        this.messageType = messageType;
-    }
-
-    public void setRecievers(String[] recievers) {
-        this.receivers = recievers;
     }
 
     public String getMessage() {
@@ -49,4 +31,11 @@ public class MessageBody {
         this.message = message;
     }
 
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
 }

@@ -1,3 +1,7 @@
+import {Group} from '../shared/group.model'
+
 export class Message{
-    constructor(private recievers:string[],private message:string,private messageType:string,private groupId:string|null){}
+  
+    constructor(public message: string,public messageType: string,public group: Group){}
+
 }

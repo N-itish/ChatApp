@@ -10,7 +10,7 @@ import {Group} from 'src/app/shared/group.model';
 })
 export class UsersGroupsComponent implements OnInit {
  
-  groupName: string = "";
+  userGroupName: string = "";
   userGroups:Group[] = [];
   constructor(private groupService:GroupService) { }
 
@@ -19,11 +19,10 @@ export class UsersGroupsComponent implements OnInit {
   }
 
   addGroup(){
-    console.log(this.groupName);
-    this.groupService.addGroup(this.groupName);
+    this.groupService.addGroupUsingName(this.userGroupName);
   } 
 
   selectGroup(group:Group){
-    this.groupService.setSelectedGroupId(group)
+    this.groupService.setSelectedGroup(group)
   }
 }

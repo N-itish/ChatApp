@@ -1,8 +1,8 @@
 <div class="group-header">
 <h5>Groups</h5>
 </div>
-<input type="text" [(ngModel)]="groupName"><button class="btn btn-success" (click)="addGroup()">Add</button>
+<input type="text" [(ngModel)]="userGroupName"><button class="btn btn-success" (click)="addGroup()">Add</button>
 
-<ul class="list-group w-25" *ngFor="let group of userGroups">
-    <li class="list-group-item" (click)="selectGroup(group)">{{group.groupName|  slice:0:20}}</li>
+<ul class="list-group w-25" *ngFor="let grp of userGroups">
+    <li class="list-group-item" (click)="selectGroup(grp)">{{grp.groupName}}</li>
 </ul>
