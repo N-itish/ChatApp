@@ -1,6 +1,6 @@
 package com.nitish.ChatApp.Handlers.Impl;
 
-import com.nitish.ChatApp.models.MessageBody;
+import com.nitish.ChatApp.models.Group;
 import com.nitish.ChatApp.Handlers.Handler;
 import com.nitish.ChatApp.dao.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,14 @@ import org.springframework.stereotype.Service;
 public class CallHandler implements Handler {
     private final static String DESTINATION = "topic/greeting";
     private final SimpMessagingTemplate messagingTemplate;
-    private final MessageBody messageBody;
+    private final Group groupMessage;
     private UserRepository userRepo;
 
 
     @Autowired
-    public CallHandler(SimpMessagingTemplate messagingTemplate,UserRepository userRepo, MessageBody messageBody){
+    public CallHandler(SimpMessagingTemplate messagingTemplate,UserRepository userRepo, Group groupMessage){
             this.messagingTemplate = messagingTemplate;
-            this.messageBody = messageBody;
+            this.groupMessage = groupMessage;
             this.userRepo = userRepo;
     }
 

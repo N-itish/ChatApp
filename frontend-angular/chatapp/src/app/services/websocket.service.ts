@@ -3,10 +3,10 @@ import sockjs from 'sockjs-client/dist/sockjs';
 import { Inject, Injectable } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
-import { Message } from '../shared/message.model';
 import { MessageStore } from './message-store.service';
-import { GroupService } from './group.service.';
 import { Group } from '../shared/group.model';
+import { groupService } from './group.service';
+import { RecieversStore } from './recievers-store.service';
 
 @Injectable()
 export class WebSocketService{
@@ -16,7 +16,8 @@ export class WebSocketService{
 
     constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
     private messageStore: MessageStore
-    ,private groupService:GroupService){
+    ,private groupService:groupService
+    ,private recievers: RecieversStore){
 
     }
 
@@ -54,15 +55,19 @@ export class WebSocketService{
     }
 
     send(message:Group){
-        console.log(message);
         this.stompClient.send("/app/private",{},JSON.stringify(message))
     }
 
     parseMessage(serverMessage:any){
         console.log(serverMessage)
-        let returnedGroup:Group = JSON.parse(serverMessage);
-        this.groupService.addGroupDirectly(returnedGroup)
-        this.groupService.setSelectedGroup(returnedGroup)
-        this.messageStore.recievedMessage.next(returnedGroup.message);
+        //TODO: need to check for the corret order otherwise this will cause issue
+        
+        //updating the current group
+        this.groupService.currentGroup = JSON.parse(serverMessage);
+        this.groupService.addUniqueGroup(this.groupService.currentGroup as Group);
+
+        //updating the recievers
+        this.recievers.addRecievers(this.groupService.currentGroup?.recievers as string[]);
+        this.messageStore.recievedMessage.next(this.groupService.currentGroup?.message as string);
     }
 }

@@ -4,5 +4,5 @@
 <input type="text" [(ngModel)]="userGroupName"><button class="btn btn-success" (click)="addGroup()">Add</button>
 
 <ul class="list-group w-25" *ngFor="let grp of userGroups">
-    <li class="list-group-item" (click)="selectGroup(grp)">{{grp.groupName}}</li>
+    <li class="list-group-item" (click)="selectGroup(grp)">{{grp.groupName}}</li><button (click)="startCall()">call</button>
 </ul>

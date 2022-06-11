@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+import com.nitish.ChatApp.Service.GroupService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -32,8 +35,13 @@ public class UserController {
 
     @PostMapping("/groups")
     public Group getGroupId(@RequestBody Group groups){
+        System.out.println("url has been hit");
         GroupService service = new GroupService();
         return service.setGroupId(groups);
     }
 
+    @GetMapping("/groups")
+    public List<Group> getAll(){
+        return GroupService.getUserGroups();
+    }
 }

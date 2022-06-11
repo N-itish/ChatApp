@@ -15,7 +15,6 @@ import { SearchComponent } from './homepage/search/search.component';
 import {HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { UsersListComponent } from './homepage/users-list/users-list.component';
 import { UsersGroupsComponent } from './homepage/users-groups/users-groups.component'
-import { GroupService } from './services/group.service.';
 import { HttpService } from './services/http.service';
 import { HttpAuthenticationInterceptor } from './http.interceptor';
 

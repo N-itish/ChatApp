@@ -5,13 +5,13 @@ import { RecieversStore } from '../services/recievers-store.service';
 import { WebSocketService } from '../services/websocket.service';
 import { OktaAuth} from '@okta/okta-auth-js';
 import { OKTA_AUTH } from '@okta/okta-angular';
-import { GroupService } from '../services/group.service.';
+import { groupService } from '../services/group.service';
 
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.css'],
-  providers:[WebSocketService,MessageStore,RecieversStore,GroupService]
+  providers:[WebSocketService,MessageStore,RecieversStore,groupService]
 })
 export class HomepageComponent implements OnInit {
   constructor( @Inject(OKTA_AUTH) public oktaAuth:OktaAuth,private recieverStore: RecieversStore) { }
