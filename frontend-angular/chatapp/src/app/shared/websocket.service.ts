@@ -3,12 +3,11 @@ import sockjs from 'sockjs-client/dist/sockjs';
 import { Inject, Injectable } from '@angular/core';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
-import { MessageStore } from './message-store.service';
-import { Group } from '../shared/group.model';
-import { groupService } from './group.service';
-import { RecieversStore } from './recievers-store.service';
+import { MessageStore } from '../services/message-store.service';
+import { Group } from './group.model';
+import { GroupService } from '../services/group.service';
 
-@Injectable()
+@Injectable({providedIn:'root'})
 export class WebSocketService{
     endPoint: string = 'http://localhost:9001/chatApp-webSocket-endpoint'
     topic:string  = '/user/topic/greeting'
@@ -16,8 +15,7 @@ export class WebSocketService{
 
     constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
     private messageStore: MessageStore
-    ,private groupService:groupService
-    ,private recievers: RecieversStore){
+    ,private groupService:GroupService){
 
     }
 
@@ -59,7 +57,7 @@ export class WebSocketService{
     }
 
     parseMessage(serverMessage:any){
-        console.log(serverMessage)
+        console.log('message from the server'+serverMessage)
         //TODO: need to check for the corret order otherwise this will cause issue
         
         //updating the current group
@@ -67,7 +65,7 @@ export class WebSocketService{
         this.groupService.addUniqueGroup(this.groupService.currentGroup as Group);
 
         //updating the recievers
-        this.recievers.addRecievers(this.groupService.currentGroup?.recievers as string[]);
+        this.groupService.addRecievers(this.groupService.currentGroup?.recievers as string[]);
         this.messageStore.recievedMessage.next(this.groupService.currentGroup?.message as string);
     }
 }

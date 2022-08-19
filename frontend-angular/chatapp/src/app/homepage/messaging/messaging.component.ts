@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { groupService } from 'src/app/services/group.service';
-import { RecieversStore } from 'src/app/services/recievers-store.service';
+import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/shared/group.model';
 import { MessageStore } from '../../services/message-store.service';
-import { WebSocketService } from '../../services/websocket.service';
+import { WebSocketService } from '../../shared/websocket.service';
 import { MessageBox } from './message-box.model';
 
 @Component({
@@ -17,11 +16,9 @@ export class MessagingComponent implements OnInit {
   constructor(
     private webSocketService: WebSocketService,
     private messageStore:MessageStore, 
-    private recieverStore: RecieversStore,
-    private groupService: groupService,
+    private groupService: GroupService,
     ) { }
   ngOnInit(): void {
-    this.webSocketService.connect();
 
     //show the message in the message area
     this.messageStore.recievedMessage.subscribe(
@@ -32,16 +29,14 @@ export class MessagingComponent implements OnInit {
 
   sendMessageToServer(currentGroup:Group) {
       currentGroup.message = this.message;
+      console.log(currentGroup);
       this.webSocketService.send(currentGroup);
   }
 
   sendMessage()
   { 
 
-    //issue how to check if we want to send new group
-
-    console.log("messaging component: "+ this.recieverStore.getRecievers);
-    let group:Group = new Group(this.recieverStore.getRecievers,"testGroup",null,this.message);
+    let group:Group = new Group(this.groupService.recievers,"testGroup",null,this.message,'');
 
     
     /*
@@ -71,13 +66,6 @@ export class MessagingComponent implements OnInit {
         this.sendMessageToServer(this.groupService.currentGroup as Group);
       }
     );
-    // if(this.recieverStore.getRecievers.length > 2){   
-    //     alert('please create a group first');
-    // } 
-    // //gaurd so that if no other reciever is selected except self new group is not created
-    // else if(this.recieverStore.getRecievers.length > 1 && this.recieverStore.getRecievers.length < 3){
-    //   this.groupService.addGroupUsingName("");
-    // }    
   }
   
 

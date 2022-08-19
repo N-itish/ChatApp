@@ -1,1 +1,13 @@
-<p>video-chat works!</p>
+<div id="videoChat">
+    <button class="btn btn-danger" (click)="leaveCall()">leave call</button>
+    <div>
+        <video id="userVideo" autoplay="true" #userVideo>
+        </video>
+    </div>
+    <!-- This is for the current user  -->
+    <canvas #currentUser></canvas>
+    <div *ngFor="let reciever of recievers">
+        <h2>{{reciever}}</h2>
+        <canvas id="{{reciever}}"></canvas>
+    </div>
+</div>

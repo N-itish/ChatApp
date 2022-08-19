@@ -4,8 +4,8 @@ import { OKTA_AUTH } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { Users } from 'src/app/shared/users.model';
 import { UserService } from 'src/app/services/user-store.service';
-import { RecieversStore } from 'src/app/services/recievers-store.service';
-import { HttpService } from 'src/app/services/http.service';
+import { HttpService } from 'src/app/shared/http.service';
+import { GroupService } from 'src/app/services/group.service';
 
 @Component({
   selector: 'app-users-list',
@@ -20,9 +20,9 @@ export class UsersListComponent implements OnInit {
   constructor(
     private userService:UserService,
     private httpService: HttpService,
-    private recieverStore: RecieversStore,
+    private groupService: GroupService,
     @Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
-    ) { }
+    ) {}
 
   ngOnInit(): void {
         //getting the list of users from backend
@@ -50,8 +50,7 @@ export class UsersListComponent implements OnInit {
   removeReciever(user:Users){
     this.selectedUsers.splice(this.selectedUsers.indexOf(user),1);
     //also removing the user from the recievers list
-    this.recieverStore.removeReciever(user.email);
-
+    this.groupService.removeReciever(user.email);   
   }
 
   parseResponse(response: any) {
@@ -61,7 +60,7 @@ export class UsersListComponent implements OnInit {
   }
 
   selectUser(user:Users){
-    this.recieverStore.addReciever(user.email);
+    this.groupService.addReciever(user.email);
     //toggle -- if new user insert else remove
     if(this.selectedUsers.indexOf(user) === -1){
       this.selectedUsers.push(user);
@@ -73,6 +72,7 @@ export class UsersListComponent implements OnInit {
 
   //checking if the user exists in the recieversStore
   containsUser(user:Users):boolean{
-    return this.recieverStore.getRecievers.includes(user.email);
+    return this.groupService.recievers.includes(user.email);
+    //return this.recieverStore.getRecievers.includes(user.email);
   }
 }

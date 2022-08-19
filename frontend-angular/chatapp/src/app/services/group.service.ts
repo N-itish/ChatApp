@@ -2,12 +2,12 @@ import { Injectable } from "@angular/core";
 import { map, tap } from "rxjs";
 import { Group } from "../shared/group.model";
 import { CustomHeaders } from "../shared/headers.model";
-import { HttpService } from "./http.service";
+import { HttpService } from "../shared/http.service";
 
-const nilUUID = '00000000-0000-0000-0000-000000000000';
+const NIL_UUID = '00000000-0000-0000-0000-000000000000';
 
 @Injectable()
-export class groupService{
+export class GroupService{
 
     /* 
         list of all services
@@ -20,11 +20,39 @@ export class groupService{
         3 -- maintain the list of groups in array
 
     */
+    constructor(private httpService:HttpService){}
+
+    sender:string = '';
+    recievers:string[] = [];
     userGroups:Group[] = [];
     currentGroup:Group | undefined;
-    constructor(private httpService:HttpService){
+
+
+    addReciever(reciever:string){
+        if(this.recievers.indexOf(reciever) === -1){
+            this.recievers.push(reciever);
+        }
     }
 
+    addRecievers(recievers:string[]){
+        this.recievers = recievers;
+    }
+
+    removeReciever(reciever:string){
+        this.recievers.splice(this.recievers.indexOf(reciever),1);
+    }
+
+    getGroup(id:string){
+        let group = undefined;
+        //finding the group based on the id
+        for(let i=0;i<this.userGroups.length;i++){
+            if(this.userGroups[i].groupId === id){
+                group = this.userGroups[i]
+            }
+        }
+        return group as Group;
+    }
+    
     addUniqueGroup(group:Group){
         let isNotPresent:boolean = true;
         for(let userGroup of this.userGroups){
@@ -35,11 +63,12 @@ export class groupService{
             }
         }
         console.log(isNotPresent);
-        if(isNotPresent && group.groupId !== nilUUID){
+        if(isNotPresent && group.groupId !== NIL_UUID){
             this.userGroups.push(group);
         }
     }
 
+    //requesting server to create a group
     createNewGroup(group:Group){
         const customHeaders: CustomHeaders = {
             key: "Content-type",
@@ -48,7 +77,7 @@ export class groupService{
 
         return this.httpService.httpPost("groups",group,[customHeaders]).pipe(tap((data)=>{
             this.currentGroup = data as Group;
-            if(this.currentGroup.groupId !== nilUUID){
+            if(this.currentGroup.groupId !== NIL_UUID){
                 this.userGroups.push(this.currentGroup as Group);
             }
         }));

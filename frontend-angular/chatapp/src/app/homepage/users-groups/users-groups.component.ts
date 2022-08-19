@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
-import { groupService } from 'src/app/services/group.service';
-import { RecieversStore } from 'src/app/services/recievers-store.service';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { GroupService } from 'src/app/services/group.service';
 import {Group} from 'src/app/shared/group.model';
 
 @Component({
@@ -13,25 +12,27 @@ export class UsersGroupsComponent implements OnInit {
  
   userGroupName: string = "";
   userGroups:Group[] = [];
-  constructor(private groupService:groupService,private recievers:RecieversStore) { }
+  constructor(private groupService:GroupService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.userGroups = this.groupService.userGroups;
   }
 
   addGroup(){
-    let group = new Group(this.recievers.getRecievers,this.userGroupName,null,""); 
+    let group = new Group(this.groupService.recievers,this.userGroupName,null,"",''); 
     this.groupService.createNewGroup(group).subscribe((data)=>{});
   } 
 
   selectGroup(group:Group){
     console.log('selected group recievers is:'+group.recievers)
     this.groupService.currentGroup = group;
-    this.recievers.addRecievers(group.recievers);
+    this.groupService.addRecievers(group.recievers);
   }
 
-  startCall(){
-    console.log('call started');
-    //this.router.navigate(['/videoCall']);
+  startCall(id:string|null){
+    console.log('clicked with id:'+id );
+    this.router.navigate(['/videoCall',id as string],{relativeTo:this.route});
   }
 }

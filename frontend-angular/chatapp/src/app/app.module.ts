@@ -15,8 +15,10 @@ import { SearchComponent } from './homepage/search/search.component';
 import {HttpClientModule, HttpHeaders, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { UsersListComponent } from './homepage/users-list/users-list.component';
 import { UsersGroupsComponent } from './homepage/users-groups/users-groups.component'
-import { HttpService } from './services/http.service';
+import { HttpService } from './shared/http.service';
 import { HttpAuthenticationInterceptor } from './http.interceptor';
+import { GroupResolver } from './services/groupId-resolver.service';
+import { GroupService } from './services/group.service';
 
 const oktaAuth = new OktaAuth({
   issuer:   myOktaConfig.oidc.issuer,
@@ -33,14 +35,14 @@ const oktaAuth = new OktaAuth({
     LoginComponent,
     SearchComponent,
     UsersListComponent,
-    UsersGroupsComponent   
+    UsersGroupsComponent 
   ],
   imports: [
     BrowserModule,
     FormsModule,
     AppRoutingModule,
     OktaAuthModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [
     { 
@@ -55,7 +57,7 @@ const oktaAuth = new OktaAuth({
           }
         }
       },
-    },{provide:HTTP_INTERCEPTORS,useClass:HttpAuthenticationInterceptor,multi:true},HttpService
+    },{provide:HTTP_INTERCEPTORS,useClass:HttpAuthenticationInterceptor,multi:true},HttpService,GroupResolver,GroupService
   ],
   bootstrap: [AppComponent]
 })

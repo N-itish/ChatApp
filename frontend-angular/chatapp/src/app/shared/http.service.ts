@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Inject, Injectable } from "@angular/core";
-import { Group } from "../shared/group.model";
-import {CustomHeaders} from "../shared/headers.model";
+import { Group } from "./group.model";
+import {CustomHeaders} from "./headers.model";
 
 const baseUrl:string = 'http://localhost:9001/api/';
 @Injectable()

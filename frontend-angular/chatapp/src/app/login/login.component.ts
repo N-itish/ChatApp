@@ -13,6 +13,8 @@ const DEFAULT_ORIGINAL_URI = window.location.origin;
 })
 export class LoginComponent implements OnInit {
   signIn: any;
+
+  authenticated: boolean = false;
   constructor(private router:Router,public authStateService: OktaAuthStateService, @Inject(OKTA_AUTH) public oktaAuth:OktaAuth) {
     this.signIn = new OktaSignIn({
       baseUrl: myConfig.oidc.issuer.split('/oauth2')[0],
@@ -21,7 +23,7 @@ export class LoginComponent implements OnInit {
       logo: 'favicon.ico',
       i18n:{
         en:{
-          'primaryauth.title':'Sign in to Angular'
+          'primaryauth.title':'Sign in to Chat App'
         }
       },
      authClient: oktaAuth
@@ -39,12 +41,13 @@ export class LoginComponent implements OnInit {
       el: '#sign-in-widget',
       scopes: myConfig.oidc.scopes
     }).then((tokens: Tokens) => {
+      this.authenticated = true;
       // Remove the widget
       this.signIn.remove();
-      console.log(tokens);
       // In this flow the redirect to Okta occurs in a hidden iframe
       this.oktaAuth.handleLoginRedirect(tokens);
     }).catch((err: any) => {
+      this.authenticated = false;
       // Typically due to misconfiguration
       throw err;
     });

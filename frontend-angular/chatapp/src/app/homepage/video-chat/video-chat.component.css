@@ -1,0 +1,12 @@
+canvas {
+    background: #cdcdcd;
+    width:200px;
+    height:200px;
+    background-color: green;
+}
+ 
+video{
+    display: none;
+    width:0px ;
+    height: 0px;
+} 
