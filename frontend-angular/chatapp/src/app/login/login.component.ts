@@ -41,13 +41,11 @@ export class LoginComponent implements OnInit {
       el: '#sign-in-widget',
       scopes: myConfig.oidc.scopes
     }).then((tokens: Tokens) => {
-      this.authenticated = true;
       // Remove the widget
       this.signIn.remove();
       // In this flow the redirect to Okta occurs in a hidden iframe
       this.oktaAuth.handleLoginRedirect(tokens);
     }).catch((err: any) => {
-      this.authenticated = false;
       // Typically due to misconfiguration
       throw err;
     });

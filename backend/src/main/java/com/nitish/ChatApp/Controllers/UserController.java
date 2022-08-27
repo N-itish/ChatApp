@@ -26,6 +26,7 @@ public class UserController {
         //requesting user list from the okta rest api
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
+        //create custom header for okta use api
         headers.add("Authorization","SSWS "+oktaApiToken);
         HttpEntity<String> httpEntity = new HttpEntity<>("body",headers);
         ResponseEntity<String> oktaResponse = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);

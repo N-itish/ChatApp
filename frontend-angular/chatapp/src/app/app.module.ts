@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './homepage/homepage.component';
 import { MessagingComponent } from './homepage/messaging/messaging.component';
-import { VideoChatComponent } from './homepage/video-chat/video-chat.component';
+import { VideoChatComponent } from './video-chat/video-chat.component';
 import { OktaAuthModule,OKTA_CONFIG } from '@okta/okta-angular';
 import { OktaAuth } from '@okta/okta-auth-js';
 import { LoginComponent } from './login/login.component';
@@ -19,6 +19,7 @@ import { HttpService } from './shared/http.service';
 import { HttpAuthenticationInterceptor } from './http.interceptor';
 import { GroupResolver } from './services/groupId-resolver.service';
 import { GroupService } from './services/group.service';
+import { LogoutComponent } from './logout/logout.component';
 
 const oktaAuth = new OktaAuth({
   issuer:   myOktaConfig.oidc.issuer,
@@ -35,7 +36,8 @@ const oktaAuth = new OktaAuth({
     LoginComponent,
     SearchComponent,
     UsersListComponent,
-    UsersGroupsComponent 
+    UsersGroupsComponent,
+    LogoutComponent 
   ],
   imports: [
     BrowserModule,

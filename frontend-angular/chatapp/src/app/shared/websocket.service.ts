@@ -53,19 +53,28 @@ export class WebSocketService{
     }
 
     send(message:Group){
-        this.stompClient.send("/app/private",{},JSON.stringify(message))
+        this.stompClient.send("/app/private",{},JSON.stringify(message));
+        console.log('memssage sent');
     }
 
     parseMessage(serverMessage:any){
-        console.log('message from the server'+serverMessage)
-        //TODO: need to check for the corret order otherwise this will cause issue
+        const serverGroup = JSON.parse(serverMessage);
         
         //updating the current group
-        this.groupService.currentGroup = JSON.parse(serverMessage);
-        this.groupService.addUniqueGroup(this.groupService.currentGroup as Group);
-
+        this.groupService.currentGroup?.next(serverGroup);
+        this.groupService.addUniqueGroup(serverGroup as Group);
+     
         //updating the recievers
-        this.groupService.addRecievers(this.groupService.currentGroup?.recievers as string[]);
-        this.messageStore.recievedMessage.next(this.groupService.currentGroup?.message as string);
+        this.groupService.addRecievers(serverGroup.recievers as string[]);
+        this.messageStore.recievedMessage.next(serverGroup.message as string);
+
+        //checking if message is a call alert
+        if(serverGroup.message === 'calling'){
+            //if it is call alert then navigate to the video call page
+            console.log('moving into the video call page');
+        }
+
+
+   
     }
 }

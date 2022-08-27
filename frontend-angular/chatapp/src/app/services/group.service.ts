@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { map, tap } from "rxjs";
+import { map, Subject, tap } from "rxjs";
 import { Group } from "../shared/group.model";
 import { CustomHeaders } from "../shared/headers.model";
 import { HttpService } from "../shared/http.service";
@@ -25,9 +25,13 @@ export class GroupService{
     sender:string = '';
     recievers:string[] = [];
     userGroups:Group[] = [];
-    currentGroup:Group | undefined;
+    currentGroup?:Subject<Group>;
 
 
+    private groupBuilder(message:string,groupName:string){
+        return new Group(this.recievers,groupName,null,message,this.sender);
+    }
+    
     addReciever(reciever:string){
         if(this.recievers.indexOf(reciever) === -1){
             this.recievers.push(reciever);
@@ -55,14 +59,19 @@ export class GroupService{
     
     addUniqueGroup(group:Group){
         let isNotPresent:boolean = true;
+        //checking if the group already exists using UUID
         for(let userGroup of this.userGroups){
-            console.log(userGroup);
             if(userGroup.groupId == group.groupId){
+                //if group is found set flag to false
                 isNotPresent = false;
                 break;
             }
         }
-        console.log(isNotPresent);
+        /*
+                if flag is set to true 
+                i.e. the group previously does not exist
+                or the group id is not empty push the new group
+        */
         if(isNotPresent && group.groupId !== NIL_UUID){
             this.userGroups.push(group);
         }
@@ -76,9 +85,12 @@ export class GroupService{
         }
 
         return this.httpService.httpPost("groups",group,[customHeaders]).pipe(tap((data)=>{
-            this.currentGroup = data as Group;
-            if(this.currentGroup.groupId !== NIL_UUID){
-                this.userGroups.push(this.currentGroup as Group);
+            //setting the current selected group as the one sent by the server
+            const returnedGroup = data as Group; 
+            this.currentGroup?.next(returnedGroup);
+            //storing the group into an array of groups
+            if(returnedGroup.groupId !== NIL_UUID){
+                this.userGroups.push( returnedGroup);
             }
         }));
     }

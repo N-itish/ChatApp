@@ -1,7 +1,9 @@
-import { ElementRef, Injectable } from "@angular/core";
+import { ElementRef, Injectable, OnInit } from "@angular/core";
 import {  Router } from "@angular/router";
 import { WebSocketService } from "src/app/shared/websocket.service";
 import { Group } from "src/app/shared/group.model";
+import { MessageStore } from "src/app/services/message-store.service";
+import { GroupService } from "src/app/services/group.service";
 
 const CONSTRAINTS = {
     video:true,
@@ -10,20 +12,23 @@ const CONSTRAINTS = {
 const mediaStream = navigator.mediaDevices.getUserMedia(CONSTRAINTS);
 
 @Injectable()
-export class VideoCallService{
+export class VideoCallService implements OnInit{
     interval: any;
     webscoketInterval: any;
     data:string = "";
-
-    constructor(private router:Router,private webSocketService: WebSocketService){}
+    returnedGroup?: Group;
+    
+    constructor(
+        private router:Router,
+        private webSocketService: WebSocketService,
+        private groupService:GroupService){}
+    ngOnInit(): void {}
     async startCall(
             webCam:ElementRef<HTMLVideoElement>,
             mic:ElementRef<HTMLAudioElement>,
             canvas: ElementRef<HTMLCanvasElement>,
-            group: Group
-        ){
-
- 
+            group: Group)
+        {
         //checking if the video/audio elements are present in the users computer
         const video =  webCam.nativeElement as HTMLVideoElement;
         const currentUserCanvas = canvas.nativeElement as HTMLCanvasElement; 
@@ -37,16 +42,13 @@ export class VideoCallService{
         }else{
             alert('Audio/Video elements are disables or not present!!!')
         }
-       
-        //use websocket to send group
-        //listen to changes in message
 
     }
 
     drawCanvas(canvas: HTMLCanvasElement,source: HTMLVideoElement){
         this.interval = setInterval(()=>{
             canvas.getContext("2d")?.drawImage(source,0,0);
-            this.data = canvas.toDataURL('image/png');
+            this.data = canvas.toDataURL('image/jpeg',0.5);
         },1000) 
     }
 
