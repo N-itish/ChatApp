@@ -41,9 +41,10 @@ export class UsersGroupsComponent implements OnInit {
   }
 
   startCall(id:string|null){
-    //alerting the group that call is about to begin
+    //alerting everyone in the group that call is about to begin
     (this.createdGroup as Group).message= 'calling';
     this.websocketService.send(this.createdGroup as Group);
+    //navigating to the video call page
     this.router.navigate(['/videoCall',id as string],{relativeTo:this.route});
   }
 }

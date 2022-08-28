@@ -6,6 +6,7 @@ import { OktaAuth } from '@okta/okta-auth-js';
 import { MessageStore } from '../services/message-store.service';
 import { Group } from './group.model';
 import { GroupService } from '../services/group.service';
+import { CallStatus } from './call-status.service';
 
 @Injectable({providedIn:'root'})
 export class WebSocketService{
@@ -15,7 +16,8 @@ export class WebSocketService{
 
     constructor(@Inject(OKTA_AUTH) private oktaAuth:OktaAuth,
     private messageStore: MessageStore
-    ,private groupService:GroupService){
+    ,private groupService:GroupService,
+    private callStatusService: CallStatus){
 
     }
 
@@ -68,10 +70,12 @@ export class WebSocketService{
         this.groupService.addRecievers(serverGroup.recievers as string[]);
         this.messageStore.recievedMessage.next(serverGroup.message as string);
 
-        //checking if message is a call alert
-        if(serverGroup.message === 'calling'){
-            //if it is call alert then navigate to the video call page
-            console.log('moving into the video call page');
+        //checking if message is a call alert 
+        //checking callstatus to make sure it is not person calling
+        //the person calling will set this flag to true in the video call component
+        if(serverGroup.message === 'calling' && this.callStatusService.callStatus.getValue() === false){
+           console.log('setting the call status to true')
+           this.callStatusService.callStatus.next(true);
         }
 
 

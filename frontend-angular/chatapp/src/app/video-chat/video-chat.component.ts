@@ -2,6 +2,7 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Data, Params } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/shared/group.model';
+import { CallStatus } from '../shared/call-status.service';
 import { VideoCallService } from './video-call.service';
 
 @Component({
@@ -18,19 +19,16 @@ export class VideoChatComponent implements OnInit {
 
   recievers:string[] = [];
   group!:Group;
-  constructor(private route: ActivatedRoute, private callService: VideoCallService,private groupService: GroupService) { }
+  constructor(
+    private route: ActivatedRoute, 
+    private callService: VideoCallService,
+    private groupService: GroupService,
+    ) { }
 
   ngOnInit(): void {
-    this.groupService.currentGroup?.subscribe((result)=>{
-      console.log(result);
-      // const sender = result.sender;
-      // if(this.recievers.indexOf(sender) === -1){
-      //   this.recievers.push(sender);
-      // }
-      // console.log('sender:'+sender);
-      // console.log(this.userCanvas.nativeElement.id);
-
-    });
+    // this.groupService.currentGroup?.subscribe((result)=>{
+    //   console.log(result);
+    // });
 
     this.route.data.subscribe((data:any)=>{
       this.group = data['group'];

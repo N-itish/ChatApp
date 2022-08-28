@@ -30,7 +30,6 @@ public class UserController {
         headers.add("Authorization","SSWS "+oktaApiToken);
         HttpEntity<String> httpEntity = new HttpEntity<>("body",headers);
         ResponseEntity<String> oktaResponse = restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);
-        System.out.println(oktaResponse);
         return oktaResponse.getBody();
     }
 
