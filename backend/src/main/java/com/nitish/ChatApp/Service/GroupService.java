@@ -35,6 +35,10 @@ public class GroupService {
         System.out.println(groups.getGroupId());
         return groups;
     }
+
+    public void dropGroups() {
+        userGroups.clear();
+    }
     /*
         TODO: need to create entity class and repository to store groups
    */

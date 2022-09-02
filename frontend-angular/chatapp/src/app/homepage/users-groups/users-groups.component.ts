@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
+import { CallStatus } from 'src/app/shared/call-status.service';
 import {Group} from 'src/app/shared/group.model';
 import { WebSocketService } from 'src/app/shared/websocket.service';
 
@@ -15,10 +16,12 @@ export class UsersGroupsComponent implements OnInit {
   userGroups:Group[] = [];
   private createdGroup?:Group;
   private selectedGroup?:Group;
+
   constructor(private groupService:GroupService,
     private router: Router,
     private route: ActivatedRoute,
-    private websocketService:WebSocketService) { }
+    private websocketService:WebSocketService,
+    private callStatusService: CallStatus) { }
 
   ngOnInit(): void {
     this.userGroups = this.groupService.userGroups;
@@ -43,6 +46,10 @@ export class UsersGroupsComponent implements OnInit {
   startCall(id:string|null){
     //alerting everyone in the group that call is about to begin
     (this.createdGroup as Group).message= 'calling';
+
+    //setting calling flag to true so that caller is not redirected again
+    this.callStatusService.callStatus.next(true);
+    
     this.websocketService.send(this.createdGroup as Group);
     //navigating to the video call page
     this.router.navigate(['/videoCall',id as string],{relativeTo:this.route});

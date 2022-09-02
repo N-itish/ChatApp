@@ -2,8 +2,6 @@ import { ElementRef, Injectable, OnInit } from "@angular/core";
 import {  Router } from "@angular/router";
 import { WebSocketService } from "src/app/shared/websocket.service";
 import { Group } from "src/app/shared/group.model";
-import { MessageStore } from "src/app/services/message-store.service";
-import { GroupService } from "src/app/services/group.service";
 import { CallStatus } from "../shared/call-status.service";
 
 const CONSTRAINTS = {
@@ -17,14 +15,14 @@ export class VideoCallService implements OnInit{
     interval: any;
     webscoketInterval: any;
     data:string = "";
-    returnedGroup?: Group;
+    userGroup: Group|null = null;
     
     constructor(
         private router:Router,
         private webSocketService: WebSocketService,
         private callStatusService: CallStatus){}
     ngOnInit(): void {}
-    async startCall(webCam:ElementRef<HTMLVideoElement>,mic:ElementRef<HTMLAudioElement>,canvas: ElementRef<HTMLCanvasElement>,group: Group)
+     startCall(webCam:ElementRef<HTMLVideoElement>,mic:ElementRef<HTMLAudioElement>,canvas: ElementRef<HTMLCanvasElement>,group: Group)
         {
         //setting the call status to true so that it is ignored in the websocket
         this.callStatusService.callStatus.next(true);
@@ -32,16 +30,14 @@ export class VideoCallService implements OnInit{
         //checking if the video/audio elements are present in the users computer
         const video =  webCam.nativeElement as HTMLVideoElement;
         const currentUserCanvas = canvas.nativeElement as HTMLCanvasElement; 
-        if(await navigator.mediaDevices.getUserMedia){
             mediaStream.then((stream)=>{
                  //start the video
                 webCam.nativeElement.srcObject = stream;
                 this.drawCanvas(currentUserCanvas,video)
                 this.streamToServer(group);
-            })
-        }else{
-            alert('Audio/Video elements are disables or not present!!!')
-        }
+            }).catch((err)=>{
+                console.log(err)
+            });
 
     }
 
@@ -52,7 +48,7 @@ export class VideoCallService implements OnInit{
         },1000) 
     }
 
-    streamToServer(group:Group){
+    private streamToServer(group:any){
         this.webscoketInterval =  setInterval(()=>{
             group.message = this.data;
             this.webSocketService.send(group);
@@ -70,6 +66,9 @@ export class VideoCallService implements OnInit{
                 track.stop();
             })
         })
+        //clearing the status flag
+        this.callStatusService.callStatus.next(false);
+
         //return back to the home page
         this.router.navigate(['/'])
     }

@@ -5,6 +5,7 @@ import { OktaAuth} from '@okta/okta-auth-js';
 import { OKTA_AUTH } from '@okta/okta-angular';
 import { GroupService } from '../services/group.service';
 import { CallStatus } from '../shared/call-status.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -12,10 +13,13 @@ import { CallStatus } from '../shared/call-status.service';
   styleUrls: ['./homepage.component.css']
 })
 export class HomepageComponent implements OnInit {
+
+  groupId:string = '';
   constructor( @Inject(OKTA_AUTH) public oktaAuth:OktaAuth,
   private groupService: GroupService,
   private websocketService: WebSocketService,
-  private callStatusService: CallStatus) { }
+  private callStatusService: CallStatus,
+  private router:Router) { }
   
   async ngOnInit() {
     const isAuthenticated = await this.oktaAuth.isAuthenticated();
@@ -26,15 +30,18 @@ export class HomepageComponent implements OnInit {
       this.groupService.addReciever(userClaims.preferred_username as string);
     }
 
+    this.groupService.currentGroup?.subscribe((result)=>{
+      this.groupId = result.groupId as string;
+    })
+
     this.callStatusService.callStatus.subscribe((result)=>{
       if(result){
-        console.log('calling');
+        this.router.navigate(['/videoCall',this.groupId]);
       }
     })
 
-
-    //opening the websocket
-    this.websocketService.connect();
+      //connecting to the websocket 
+      this.websocketService.connect();
   }
     
 }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
 import { ActivatedRoute, Data, Params } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/shared/group.model';
@@ -11,28 +11,39 @@ import { VideoCallService } from './video-call.service';
   styleUrls: ['./video-chat.component.css'],
   providers:[VideoCallService]
 })
-export class VideoChatComponent implements OnInit {
+export class VideoChatComponent implements OnInit, AfterViewInit {
   @ViewChild('userVideo',{static:true}) userVideo!:ElementRef<HTMLVideoElement>;
   @ViewChild('userAideo',{static:true}) userAudio!:ElementRef<HTMLAudioElement>;
   @ViewChild('currentUser',{static:true}) canvas!:ElementRef<HTMLCanvasElement>;
-  @ViewChild('canvas',{static:true}) userCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('sender',{static: false}) senders!:QueryList<ElementRef> 
 
-  recievers:string[] = [];
+  imageSenders:string[] = [];
+
   group!:Group;
   constructor(
     private route: ActivatedRoute, 
     private callService: VideoCallService,
     private groupService: GroupService,
     ) { }
+  ngAfterViewInit(): void {
+    this.groupService.currentGroup.subscribe((result)=>{
+      const sendersArray = Object.keys(this.senders);
+      console.log(sendersArray); 
+    })
+    
+  }
+
 
   ngOnInit(): void {
-    // this.groupService.currentGroup?.subscribe((result)=>{
-    //   console.log(result);
-    // });
+  
 
+ 
+
+    this.imageSenders = this.groupService.recievers;
+    console.log(this.imageSenders);
     this.route.data.subscribe((data:any)=>{
       this.group = data['group'];
-      console.log('message from the videochat component'+this.group);
+      console.log('message from the videochat component');
       this.callService.startCall(this.userVideo,this.userAudio,this.canvas,this.group);
     });
   }

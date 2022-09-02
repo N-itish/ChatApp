@@ -63,11 +63,7 @@ export class WebSocketService{
         const serverGroup = JSON.parse(serverMessage);
         
         //updating the current group
-        this.groupService.currentGroup?.next(serverGroup);
-        this.groupService.addUniqueGroup(serverGroup as Group);
-     
-        //updating the recievers
-        this.groupService.addRecievers(serverGroup.recievers as string[]);
+        this.groupService.updateCurrentGroup(serverGroup as Group);
         this.messageStore.recievedMessage.next(serverGroup.message as string);
 
         //checking if message is a call alert 

@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class UserController {
-
+    private GroupService service;
     @Value("${okta.rest.api-token}")
     private String oktaApiToken;
 
@@ -37,8 +37,13 @@ public class UserController {
     @PostMapping("/groups")
     public Group getGroupId(@RequestBody Group groups){
         System.out.println("url has been hit");
-        GroupService service = new GroupService();
+        service = new GroupService();
         return service.setGroupId(groups);
+    }
+
+    @GetMapping("/dropGroups")
+    public void dropGroups(){
+        service.dropGroups();
     }
 
     @GetMapping("/groups")

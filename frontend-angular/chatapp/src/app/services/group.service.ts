@@ -25,7 +25,7 @@ export class GroupService{
     sender:string = '';
     recievers:string[] = [];
     userGroups:Group[] = [];
-    currentGroup?:Subject<Group>;
+    currentGroup:Subject<Group> = new Subject<Group>();
 
 
     private groupBuilder(message:string,groupName:string){
@@ -93,6 +93,15 @@ export class GroupService{
                 this.userGroups.push( returnedGroup);
             }
         }));
+    }
+
+    updateCurrentGroup( currentGroup:Group){
+        //setting the current group
+        this.currentGroup?.next(currentGroup);
+        //pushing the given group into the groups array
+        this.addUniqueGroup(currentGroup);    
+        //updating the recievers
+        this.addRecievers(currentGroup.recievers as string[]);
     }
 
 
