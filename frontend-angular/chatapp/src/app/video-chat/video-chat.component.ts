@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Data, Params } from '@angular/router';
 import { GroupService } from 'src/app/services/group.service';
 import { Group } from 'src/app/shared/group.model';
@@ -15,7 +15,7 @@ export class VideoChatComponent implements OnInit, AfterViewInit {
   @ViewChild('userVideo',{static:true}) userVideo!:ElementRef<HTMLVideoElement>;
   @ViewChild('userAideo',{static:true}) userAudio!:ElementRef<HTMLAudioElement>;
   @ViewChild('currentUser',{static:true}) canvas!:ElementRef<HTMLCanvasElement>;
-  @ViewChild('sender',{static: false}) senders!:QueryList<ElementRef> 
+  @ViewChildren('sender') senders!:QueryList<ElementRef> ;
 
   imageSenders:string[] = [];
 
@@ -27,20 +27,27 @@ export class VideoChatComponent implements OnInit, AfterViewInit {
     ) { }
   ngAfterViewInit(): void {
     this.groupService.currentGroup.subscribe((result)=>{
-      const sendersArray = Object.keys(this.senders);
-      console.log(sendersArray); 
+      this.senders.forEach((sender)=>{
+        //seperate the canvas for that particular sender
+        if(this.imageSenders.indexOf(result.sender) === parseInt(sender.nativeElement.id)){
+          console.log("works till here");
+          let context  = sender.nativeElement.getContext('2d');
+          let image = new Image();
+          image.onload = () =>{
+            context.drawImage(image,0,0);
+          }
+          image.src = result.message;
+        }
+       })
     })
     
   }
 
 
   ngOnInit(): void {
-  
-
- 
-
+    //setting the no of canvas this component needs to create
     this.imageSenders = this.groupService.recievers;
-    console.log(this.imageSenders);
+   //getting data from the group resolver and starting the video service
     this.route.data.subscribe((data:any)=>{
       this.group = data['group'];
       console.log('message from the videochat component');

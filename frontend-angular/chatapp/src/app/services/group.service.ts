@@ -84,6 +84,12 @@ export class GroupService{
             value: "application/json"
         }
 
+        //setting the sender in the group
+        group.sender = this.sender;
+        console.log(group.sender);
+
+        //  requests server to create new group in the database as well as requesting for unique id
+        // then returns the group sent by the server to the calling function
         return this.httpService.httpPost("groups",group,[customHeaders]).pipe(tap((data)=>{
             //setting the current selected group as the one sent by the server
             const returnedGroup = data as Group; 

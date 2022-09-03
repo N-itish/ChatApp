@@ -7,7 +7,7 @@
     <!-- This is for the current user  -->
     <canvas #currentUser></canvas>
     <div *ngFor="let sender of imageSenders;let i = index">
-        <h2>{{sender}}</h2>
-        <canvas id = "sender_{{i}}" #sender></canvas>
+        <h3>{{sender}}</h3>
+        <canvas id = "{{i}}" #sender></canvas>
     </div>
 </div>
